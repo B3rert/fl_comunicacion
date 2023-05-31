@@ -1,8 +1,16 @@
+import 'package:fl_comunicacion/routes/app_routes.dart';
+import 'package:fl_comunicacion/services/services.dart';
+import 'package:fl_comunicacion/shared_preferences/preferences.dart';
+import 'package:fl_comunicacion/themes/app_theme.dart';
 import 'package:fl_comunicacion/view_models/view_models.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-void main() => runApp(const AppState());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Preferences.init();
+  runApp(const AppState());
+}
 
 class AppState extends StatelessWidget {
   const AppState({Key? key}) : super(key: key);
@@ -14,6 +22,8 @@ class AppState extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => LoginViewModel()),
         ChangeNotifierProvider(create: (_) => HomeViewModel()),
         ChangeNotifierProvider(create: (_) => ApiViewModel()),
+        ChangeNotifierProvider(create: (_) => HelloService()),
+        ChangeNotifierProvider(create: (_) => LoginService()),
       ],
       child: const MyApp(),
     );
@@ -25,16 +35,28 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _loginVM = Provider.of<LoginViewModel>(context, listen: false);
+
+    if (Preferences.token.isNotEmpty) {
+      _loginVM.token = Preferences.token;
+      _loginVM.nameUser = Preferences.userName;
+    }
+
+    // Preferences.clearUrl();
+    // Preferences.clear();
+
     return MaterialApp(
-      title: 'Material App',
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Material App Bar'),
-        ),
-        body: const Center(
-          child: Text('Hello World'),
-        ),
-      ),
+      scaffoldMessengerKey: NotificationsService.messengerKey,
+      title: "Restaurante",
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.lightTheme,
+      initialRoute: Preferences.baseUrl.isEmpty
+          ? "api"
+          : Preferences.token.isNotEmpty
+              ? AppRoutes.secondRoute
+              : AppRoutes.initialRoute,
+      routes: AppRoutes.routes,
+      onGenerateRoute: AppRoutes.onGenerateRoute,
     );
   }
 }
