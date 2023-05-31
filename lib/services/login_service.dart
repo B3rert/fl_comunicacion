@@ -17,7 +17,7 @@ class LoginService extends ChangeNotifier {
     try {
       // Arma Url del Api
       final url =
-          Uri.https(_baseUrl, "${_path.isEmpty ? '' : _path + '/'}api/Login");
+          Uri.http(_baseUrl, "${_path.isEmpty ? '' : _path + '/'}api/Login");
       // Configurar Api y consumirla
       final response = await http.post(url,
           body: loginModel.toJson(),

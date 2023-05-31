@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
     }
 
     // Preferences.clearUrl();
-    // Preferences.clear();
+    // Preferences.clearToken();
 
     return MaterialApp(
       scaffoldMessengerKey: NotificationsService.messengerKey,

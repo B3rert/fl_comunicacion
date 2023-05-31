@@ -1,7 +1,7 @@
 import 'package:fl_comunicacion/models/models.dart';
 import 'package:fl_comunicacion/services/services.dart';
 import 'package:fl_comunicacion/shared_preferences/preferences.dart';
-import 'package:fl_comunicacion/widgets/widget.dart';
+import 'package:fl_comunicacion/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
