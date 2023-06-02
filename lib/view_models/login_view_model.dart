@@ -84,9 +84,9 @@ class LoginViewModel extends ChangeNotifier {
 
       RespLogin respLogin = res.message;
 
-      if (respLogin.res) {
+      if (respLogin.success) {
         //guardar token y nombre de usuario
-        token = respLogin.message;
+        token = respLogin.res;
         nameUser = loginModel.user;
 
         if (isSliderDisabledSession) {
@@ -96,7 +96,7 @@ class LoginViewModel extends ChangeNotifier {
 
         Navigator.pushReplacementNamed(context, "home");
       } else {
-        NotificationsService.showSnackbar(respLogin.message);
+        NotificationsService.showSnackbar(respLogin.res);
       }
     }
   }
