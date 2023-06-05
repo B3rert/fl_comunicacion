@@ -43,7 +43,16 @@ class HomeView extends StatelessWidget {
           ),
         ),
       ),
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.logout,
+            ),
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
