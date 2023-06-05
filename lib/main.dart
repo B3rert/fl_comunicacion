@@ -50,11 +50,12 @@ class MyApp extends StatelessWidget {
       title: "Restaurante",
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      initialRoute: Preferences.baseUrl.isEmpty
-          ? "api"
-          : Preferences.token.isNotEmpty
-              ? AppRoutes.secondRoute
-              : AppRoutes.initialRoute,
+      initialRoute: "home",
+      // initialRoute: Preferences.baseUrl.isEmpty
+      //     ? "api"
+      //     : Preferences.token.isNotEmpty
+      //         ? AppRoutes.secondRoute
+      //         : AppRoutes.initialRoute,
       routes: AppRoutes.routes,
       onGenerateRoute: AppRoutes.onGenerateRoute,
     );
