@@ -8,6 +8,7 @@ class AppRoutes {
     secondRoute: (BuildContext context) => const HomeView(),
     initialRoute: (BuildContext context) => const LoginView(),
     'api': (BuildContext context) => const ApiView(),
+    'feed': (BuildContext context) => const FeedView(),
   };
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {

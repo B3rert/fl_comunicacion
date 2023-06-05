@@ -9,7 +9,7 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: GestureDetector(
-        onTap: () => {},
+        onTap: () => Navigator.pushNamed(context, 'feed'),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 22),
           child: CardWidget(
