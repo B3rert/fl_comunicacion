@@ -35,24 +35,24 @@ class LoginModel {
 
 class RespLogin {
   RespLogin({
+    required this.success,
     required this.res,
-    required this.message,
   });
 
-  bool res;
-  String message;
+  bool success;
+  String res;
 
   factory RespLogin.fromJson(String str) => RespLogin.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
   factory RespLogin.fromMap(Map<String, dynamic> json) => RespLogin(
+        success: json["success"],
         res: json["res"],
-        message: json["message"],
       );
 
   Map<String, dynamic> toMap() => {
+        "success": success,
         "res": res,
-        "message": message,
       };
 }

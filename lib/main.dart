@@ -24,6 +24,9 @@ class AppState extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ApiViewModel()),
         ChangeNotifierProvider(create: (_) => HelloService()),
         ChangeNotifierProvider(create: (_) => LoginService()),
+        ChangeNotifierProvider(create: (_) => BienvenidaService()),
+        ChangeNotifierProvider(create: (_) => UserService()),
+        ChangeNotifierProvider(create: (_) => BannerService()),
       ],
       child: const MyApp(),
     );
