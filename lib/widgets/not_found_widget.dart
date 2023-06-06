@@ -17,6 +17,7 @@ class NotFoundWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           icon,
+          const SizedBox(height: 20),
           Text(
             text,
             style: const TextStyle(fontSize: 20),

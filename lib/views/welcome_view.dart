@@ -87,7 +87,7 @@ class _WelcomeViewState extends State<WelcomeView> {
                         NotFoundWidget(
                           text: "No se encontraron elementos.",
                           icon: Icon(
-                            Icons.no_meals,
+                            Icons.image_not_supported_outlined,
                             size: 130,
                           ),
                         ),
