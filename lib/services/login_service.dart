@@ -2,10 +2,9 @@ import 'dart:convert';
 
 import 'package:fl_comunicacion/models/models.dart';
 import 'package:fl_comunicacion/shared_preferences/preferences.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class LoginService extends ChangeNotifier {
+class LoginService {
   // Url del servidor
   final String _baseUrl = Preferences.baseUrl;
   //path
@@ -30,7 +29,6 @@ class LoginService extends ChangeNotifier {
         message: respLogin,
       );
     } catch (e) {
-      print(e);
       return ApiResModel(
         succes: false,
         message: e.toString(),

@@ -3,7 +3,6 @@ import 'package:fl_comunicacion/services/services.dart';
 import 'package:fl_comunicacion/shared_preferences/preferences.dart';
 import 'package:fl_comunicacion/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class LoginViewModel extends ChangeNotifier {
   bool isLoading = false;
@@ -52,7 +51,7 @@ class LoginViewModel extends ChangeNotifier {
 
   //init Session
   login(BuildContext context) async {
-    final loginService = Provider.of<LoginService>(context, listen: false);
+    LoginService loginService = LoginService();
 
     //validate form
     // Navigator.pushNamed(context, "home");
