@@ -99,6 +99,7 @@ class _WelcomeViewState extends State<WelcomeView> {
                             ),
                           ),
                         ),
+                        const SizedBox(height: 20),
                         Container(
                           margin: const EdgeInsets.all(10),
                           width: double.infinity,
