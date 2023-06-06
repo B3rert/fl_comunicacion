@@ -1,10 +1,52 @@
+import 'package:fl_comunicacion/models/models.dart';
+import 'package:fl_comunicacion/services/bienvenida_service.dart';
+import 'package:fl_comunicacion/view_models/view_models.dart';
 import 'package:fl_comunicacion/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'login_view_model.dart';
-
 class HomeViewModel extends ChangeNotifier {
+  bool isLoading = false;
+
+  final List<BienvenidaModel> mensajes = [];
+
+  loadData(BuildContext context) async {
+    //data user
+    final _loginVM = Provider.of<LoginViewModel>(context, listen: false);
+    //intance service
+    BienvenidaService bienvenidaService = BienvenidaService();
+    //load prosses
+    isLoading = true;
+    notifyListeners();
+    //call service
+    ApiResModel res = await bienvenidaService.getBienvenida(
+      _loginVM.nameUser,
+      _loginVM.token,
+    );
+
+    //stop prosses
+    isLoading = false;
+    notifyListeners();
+
+    //valid succes response
+    if (!res.succes) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertInfoWidget(
+          title: "Algo salió mal",
+          description:
+              "No se pudo completar el proceso de conexión al servicio. Por favor, inténtalo de nuevo más tarde.",
+          onOk: () => Navigator.pop(context),
+        ),
+      );
+      return;
+    }
+
+    //ad data in list
+    mensajes.clear();
+    mensajes.addAll(res.message);
+  }
+
   logout(BuildContext context) {
     final _loginVM = Provider.of<LoginViewModel>(context, listen: false);
 

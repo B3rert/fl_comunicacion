@@ -2,24 +2,28 @@ import 'dart:convert';
 
 import 'package:fl_comunicacion/models/models.dart';
 import 'package:fl_comunicacion/shared_preferences/preferences.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
-//TODO:probar y cambniar a metodos estaticos
-
-class BienvenidaService extends ChangeNotifier {
+class BienvenidaService {
   // Url del servidor
   final String _baseUrl = Preferences.baseUrl;
   //path
   final String _path = Preferences.path;
 
-  Future<ApiResModel> getApplication(
+  Future<ApiResModel> getBienvenida(
     String user,
     String token,
   ) async {
     try {
-      final url = Uri.http(
-          _baseUrl, "${_path.isEmpty ? '' : _path + '/'}api/Bienvenida/$user");
+      Uri url;
+      if (Preferences.prefix == 'https') {
+        url = Uri.https(_baseUrl,
+            "${_path.isEmpty ? '' : _path + '/'}api/Bienvenida/$user");
+      } else {
+        url = Uri.http(_baseUrl,
+            "${_path.isEmpty ? '' : _path + '/'}api/Bienvenida/$user");
+      }
+
       final response = await http.get(
         url,
         headers: {

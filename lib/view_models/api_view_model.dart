@@ -58,7 +58,7 @@ class ApiViewModel extends ChangeNotifier {
     isLoading = true;
     notifyListeners();
 
-    ApiResModel res = await helloService.getHello(server, path);
+    ApiResModel res = await helloService.getHello(server, path, prefix);
 
     isLoading = false;
     notifyListeners();

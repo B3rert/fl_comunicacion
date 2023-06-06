@@ -8,12 +8,17 @@ class HelloService {
   Future<ApiResModel> getHello(
     String baseUrl,
     String path,
+    String prefix,
   ) async {
     //  Consumo del Api
+    Uri url;
     try {
       // Arma Url del Api
-      final url =
-          Uri.http(baseUrl, "${path.isEmpty ? '' : path + '/'}api/Hello");
+      if (prefix == 'https') {
+        url = Uri.https(baseUrl, "${path.isEmpty ? '' : path + '/'}api/Hello");
+      } else {
+        url = Uri.http(baseUrl, "${path.isEmpty ? '' : path + '/'}api/Hello");
+      }
 
       // Configurar Api y consumirla
       final response = await http.get(url);
