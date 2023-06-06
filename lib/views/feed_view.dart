@@ -50,36 +50,38 @@ class _FeedViewState extends State<FeedView> {
                             ],
                           )
                         : ListView(
-                            children: [Text("data")],
+                            children: [
+                              Text("data"),
+                            ],
                           ),
                   ),
                 ),
                 Stack(
                   children: [
-                    Stack(
-                      children: [
-                        FadeInImage(
-                          placeholder: AssetImage("assets/banner.png"),
-                          image: NetworkImage(
-                              "https://ds.demosoftonline.com/host/la_carreta/BusinessAdvantage/UploadFile/ghvlbqmmknzkolzy4xou0kxm85135.jpg"),
-                        ),
-                      ],
+                    SizedBox(
+                      height: 250,
+                      width: double.infinity,
+                      child: _vm.banners.isEmpty
+                          ? const Image(
+                              image: AssetImage("assets/banner.png"),
+                              fit: BoxFit.cover,
+                            )
+                          : FadeInImage(
+                              image:
+                                  NetworkImage(_vm.banners[0].bannerPrincipal),
+                              placeholder:
+                                  const AssetImage("assets/banner.png"),
+                              imageErrorBuilder: (context, error, stackTrace) {
+                                return Image.asset(
+                                  'assets/banner.png',
+                                  fit: BoxFit.cover,
+                                );
+                              },
+                              fit: BoxFit.cover,
+                            ),
                     ),
                     Container(
                       height: 250.0,
-                      // decoration: BoxDecoration(
-                      //   gradient: LinearGradient(
-                      //       colors: [Color(0xFF4268D3), Color(0xFF584CD1)],
-                      //       begin: FractionalOffset(0.2, 0.0),
-                      //       end: FractionalOffset(1.0, 0.6),
-                      //       stops: [0.0, 0.6],
-                      //       tileMode: TileMode.clamp),
-                      // ),
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: AssetImage("assets/banner.png")),
-                      ),
                       child: IconButton(
                         iconSize: 50,
                         onPressed: () {

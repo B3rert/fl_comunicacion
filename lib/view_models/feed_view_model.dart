@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 class FeedViewModel extends ChangeNotifier {
   bool isLoading = false;
   final List<InfoUserModel> users = [];
+  final List<BannerModel> banners = [];
 
   loadData(BuildContext context) async {
     final _loginVM = Provider.of<LoginViewModel>(context, listen: false);
@@ -23,12 +24,36 @@ class FeedViewModel extends ChangeNotifier {
       _loginVM.token,
     );
 
+    //valid succes response
+    if (!res.succes) {
+      //stop prosses
+      isLoading = false;
+      notifyListeners();
+
+      showDialog(
+        context: context,
+        builder: (context) => AlertInfoWidget(
+          title: "Algo salió mal",
+          description:
+              "No se pudo completar el proceso de conexión al servicio. Por favor, inténtalo de nuevo más tarde.",
+          onOk: () => Navigator.pop(context),
+        ),
+      );
+      return;
+    }
+    BannerService bannerService = BannerService();
+
+    ApiResModel resBanner = await bannerService.getBanner(
+      _loginVM.nameUser,
+      _loginVM.token,
+    );
+
     //stop prosses
     isLoading = false;
     notifyListeners();
 
     //valid succes response
-    if (!res.succes) {
+    if (!resBanner.succes) {
       showDialog(
         context: context,
         builder: (context) => AlertInfoWidget(
@@ -44,6 +69,9 @@ class FeedViewModel extends ChangeNotifier {
     //ad data in list
     users.clear();
     users.addAll(res.message);
+
+    banners.clear();
+    banners.addAll(resBanner.message);
   }
 
   logout(BuildContext context) {

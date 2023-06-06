@@ -2,10 +2,9 @@ import 'dart:convert';
 
 import 'package:fl_comunicacion/models/models.dart';
 import 'package:fl_comunicacion/shared_preferences/preferences.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
-class BannerService extends ChangeNotifier {
+class BannerService {
   // Url del servidor
   final String _baseUrl = Preferences.baseUrl;
   //path
@@ -16,8 +15,15 @@ class BannerService extends ChangeNotifier {
     String token,
   ) async {
     try {
-      final url = Uri.http(
-          _baseUrl, "${_path.isEmpty ? '' : _path + '/'}api/Banner/$user");
+      Uri url;
+      if (Preferences.prefix == 'https') {
+        url = Uri.https(
+            _baseUrl, "${_path.isEmpty ? '' : _path + '/'}api/Banner/$user");
+      } else {
+        url = Uri.http(
+            _baseUrl, "${_path.isEmpty ? '' : _path + '/'}api/Banner/$user");
+      }
+
       final response = await http.get(
         url,
         headers: {"Authorization": "bearer $token", "user": user},
@@ -28,10 +34,8 @@ class BannerService extends ChangeNotifier {
 
       //recorrer lista api Y  agregar a lista local
       for (var item in resJson) {
-        //JSON a map
-        Map<String, dynamic> application = item;
         //Tipar a map
-        final responseFinally = BannerModel.fromMap(application);
+        final responseFinally = BannerModel.fromMap(item);
         //agregar item a la lista
         banner.add(responseFinally);
       }
