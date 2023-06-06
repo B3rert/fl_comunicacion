@@ -44,7 +44,7 @@ class WelcomeViewModel extends ChangeNotifier {
 
     //ad data in list
     mensajes.clear();
-    // mensajes.addAll(res.message);
+    mensajes.addAll(res.message);
   }
 
   logout(BuildContext context) {

@@ -84,13 +84,7 @@ class _WelcomeViewState extends State<WelcomeView> {
                   ? ListView(
                       children: const [
                         SizedBox(height: 75),
-                        NotFoundWidget(
-                          text: "No se encontraron elementos.",
-                          icon: Icon(
-                            Icons.image_not_supported_outlined,
-                            size: 130,
-                          ),
-                        ),
+                        NotFoundWidget(),
                       ],
                     )
                   : ListView(
