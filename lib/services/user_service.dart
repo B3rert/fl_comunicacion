@@ -2,12 +2,9 @@ import 'dart:convert';
 
 import 'package:fl_comunicacion/models/models.dart';
 import 'package:fl_comunicacion/shared_preferences/preferences.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
-//TODO:Probar
-
-class UserService extends ChangeNotifier {
+class UserService {
   // Url del servidor
   final String _baseUrl = Preferences.baseUrl;
   //path
@@ -18,8 +15,16 @@ class UserService extends ChangeNotifier {
     String token,
   ) async {
     try {
-      final url = Uri.http(
-          _baseUrl, "${_path.isEmpty ? '' : _path + '/'}api/User/info/$user");
+      Uri url;
+
+      if (Preferences.prefix == 'https') {
+        url = Uri.https(
+            _baseUrl, "${_path.isEmpty ? '' : _path + '/'}api/User/info/$user");
+      } else {
+        url = Uri.http(
+            _baseUrl, "${_path.isEmpty ? '' : _path + '/'}api/User/info/$user");
+      }
+
       final response = await http.get(
         url,
         headers: {
@@ -32,10 +37,8 @@ class UserService extends ChangeNotifier {
 
       //recorrer lista api Y  agregar a lista local
       for (var item in resJson) {
-        //JSON a map
-        Map<String, dynamic> application = item;
         //Tipar a map
-        final responseFinally = InfoUserModel.fromMap(application);
+        final responseFinally = InfoUserModel.fromMap(item);
         //agregar item a la lista
         info.add(responseFinally);
       }

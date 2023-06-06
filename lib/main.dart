@@ -22,7 +22,6 @@ class AppState extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => LoginViewModel()),
         ChangeNotifierProvider(create: (_) => WelcomeViewModel()),
         ChangeNotifierProvider(create: (_) => ApiViewModel()),
-        ChangeNotifierProvider(create: (_) => UserService()),
         ChangeNotifierProvider(create: (_) => BannerService()),
         ChangeNotifierProvider(create: (_) => FeedViewModel()),
       ],

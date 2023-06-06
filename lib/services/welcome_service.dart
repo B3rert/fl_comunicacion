@@ -36,10 +36,8 @@ class WelcomeService {
 
       //recorrer lista api Y  agregar a lista local
       for (var item in resJson) {
-        //JSON a map
-        Map<String, dynamic> mensaje = item;
         //Tipar a map
-        final responseFinally = WelcomeModel.fromMap(mensaje);
+        final responseFinally = WelcomeModel.fromMap(item);
         //agregar item a la lista
         bienvenidas.add(responseFinally);
       }
