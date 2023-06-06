@@ -1,16 +1,9 @@
 import 'dart:convert';
 
 import 'package:fl_comunicacion/models/models.dart';
-import 'package:fl_comunicacion/shared_preferences/preferences.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
-class HelloService extends ChangeNotifier {
-  // Url del servidor
-  final String _baseUrl = Preferences.baseUrl;
-  //path
-  final String _path = Preferences.path;
-
+class HelloService {
   // Consume el Api
   Future<ApiResModel> getHello(
     String baseUrl,

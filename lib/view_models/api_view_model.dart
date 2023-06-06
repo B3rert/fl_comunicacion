@@ -2,7 +2,6 @@ import 'package:fl_comunicacion/models/models.dart';
 import 'package:fl_comunicacion/services/services.dart';
 import 'package:fl_comunicacion/shared_preferences/preferences.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class ApiViewModel extends ChangeNotifier {
   bool isLoading = false;
@@ -53,7 +52,8 @@ class ApiViewModel extends ChangeNotifier {
       path = valueUrl.join("/");
     }
 
-    final helloService = Provider.of<HelloService>(context, listen: false);
+    //intsnce service
+    HelloService helloService = HelloService();
 
     isLoading = true;
     notifyListeners();
