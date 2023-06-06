@@ -4,13 +4,13 @@ import 'package:fl_comunicacion/models/models.dart';
 import 'package:fl_comunicacion/shared_preferences/preferences.dart';
 import 'package:http/http.dart' as http;
 
-class BienvenidaService {
+class WelcomeService {
   // Url del servidor
   final String _baseUrl = Preferences.baseUrl;
   //path
   final String _path = Preferences.path;
 
-  Future<ApiResModel> getBienvenida(
+  Future<ApiResModel> getWelcome(
     String user,
     String token,
   ) async {
@@ -32,14 +32,14 @@ class BienvenidaService {
       );
       final resJson = json.decode(response.body);
 
-      List<BienvenidaModel> bienvenidas = [];
+      List<WelcomeModel> bienvenidas = [];
 
       //recorrer lista api Y  agregar a lista local
       for (var item in resJson) {
         //JSON a map
         Map<String, dynamic> mensaje = item;
         //Tipar a map
-        final responseFinally = BienvenidaModel.fromMap(mensaje);
+        final responseFinally = WelcomeModel.fromMap(mensaje);
         //agregar item a la lista
         bienvenidas.add(responseFinally);
       }

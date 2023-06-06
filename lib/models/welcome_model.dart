@@ -4,7 +4,7 @@
 
 import 'dart:convert';
 
-class BienvenidaModel {
+class WelcomeModel {
   int tarea;
   String descripcion;
   String fechaIni;
@@ -17,7 +17,7 @@ class BienvenidaModel {
   int estado;
   String fechaHora;
 
-  BienvenidaModel({
+  WelcomeModel({
     required this.tarea,
     required this.descripcion,
     required this.fechaIni,
@@ -31,12 +31,12 @@ class BienvenidaModel {
     required this.fechaHora,
   });
 
-  factory BienvenidaModel.fromJson(String str) =>
-      BienvenidaModel.fromMap(json.decode(str));
+  factory WelcomeModel.fromJson(String str) =>
+      WelcomeModel.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory BienvenidaModel.fromMap(Map<String, dynamic> json) => BienvenidaModel(
+  factory WelcomeModel.fromMap(Map<String, dynamic> json) => WelcomeModel(
         tarea: json["tarea"],
         descripcion: json["descripcion"],
         fechaIni: json["fecha_Ini"],

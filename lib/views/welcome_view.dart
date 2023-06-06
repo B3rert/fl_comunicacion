@@ -1,24 +1,23 @@
-import 'package:fl_comunicacion/models/bienvenida_model.dart';
 import 'package:fl_comunicacion/themes/app_theme.dart';
-import 'package:fl_comunicacion/view_models/home_view_model.dart';
+import 'package:fl_comunicacion/view_models/welcome_view_model.dart';
 import 'package:fl_comunicacion/widgets/not_found_widget.dart';
 import 'package:fl_comunicacion/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class HomeView extends StatefulWidget {
-  const HomeView({Key? key}) : super(key: key);
+class WelcomeView extends StatefulWidget {
+  const WelcomeView({Key? key}) : super(key: key);
 
   @override
-  State<HomeView> createState() => _HomeViewState();
+  State<WelcomeView> createState() => _WelcomeViewState();
 }
 
-class _HomeViewState extends State<HomeView> {
+class _WelcomeViewState extends State<WelcomeView> {
   @override
   void initState() {
     super.initState();
-    final _homeVM = Provider.of<HomeViewModel>(context, listen: false);
+    final _homeVM = Provider.of<WelcomeViewModel>(context, listen: false);
 
     WidgetsBinding.instance
         ?.addPostFrameCallback((_) => _homeVM.loadData(context));
@@ -26,7 +25,7 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    final _vm = Provider.of<HomeViewModel>(context);
+    final _vm = Provider.of<WelcomeViewModel>(context);
 
     return Scaffold(
       bottomNavigationBar: _vm.isLoading

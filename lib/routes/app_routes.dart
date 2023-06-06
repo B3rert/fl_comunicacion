@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 class AppRoutes {
   static const initialRoute = 'login';
-  static const secondRoute = 'home';
+  static const secondRoute = 'welcome';
   static Map<String, Widget Function(BuildContext)> routes = {
-    secondRoute: (BuildContext context) => const HomeView(),
+    secondRoute: (BuildContext context) => const WelcomeView(),
     initialRoute: (BuildContext context) => const LoginView(),
     'api': (BuildContext context) => const ApiView(),
     'feed': (BuildContext context) => const FeedView(),
@@ -14,7 +14,7 @@ class AppRoutes {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     //print(settings);
     return MaterialPageRoute(
-      builder: (BuildContext context) => const HomeView(),
+      builder: (BuildContext context) => const WelcomeView(),
     );
   }
 }

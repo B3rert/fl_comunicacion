@@ -1,25 +1,25 @@
 import 'package:fl_comunicacion/models/models.dart';
-import 'package:fl_comunicacion/services/bienvenida_service.dart';
+import 'package:fl_comunicacion/services/welcome_service.dart';
 import 'package:fl_comunicacion/view_models/view_models.dart';
 import 'package:fl_comunicacion/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class HomeViewModel extends ChangeNotifier {
+class WelcomeViewModel extends ChangeNotifier {
   bool isLoading = false;
 
-  final List<BienvenidaModel> mensajes = [];
+  final List<WelcomeModel> mensajes = [];
 
   loadData(BuildContext context) async {
     //data user
     final _loginVM = Provider.of<LoginViewModel>(context, listen: false);
     //intance service
-    BienvenidaService bienvenidaService = BienvenidaService();
+    WelcomeService welcomeService = WelcomeService();
     //load prosses
     isLoading = true;
     notifyListeners();
     //call service
-    ApiResModel res = await bienvenidaService.getBienvenida(
+    ApiResModel res = await welcomeService.getWelcome(
       _loginVM.nameUser,
       _loginVM.token,
     );
