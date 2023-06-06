@@ -1,26 +1,10 @@
-import 'package:fl_comunicacion/models/info_user_model.dart';
 import 'package:fl_comunicacion/themes/app_theme.dart';
-import 'package:fl_comunicacion/view_models/feed_view_model.dart';
+import 'package:fl_comunicacion/view_models/view_models.dart';
 import 'package:fl_comunicacion/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class FeedView extends StatefulWidget {
-  const FeedView({Key? key}) : super(key: key);
-
-  @override
-  State<FeedView> createState() => _FeedViewState();
-}
-
-class _FeedViewState extends State<FeedView> {
-  @override
-  void initState() {
-    super.initState();
-    final _vm = Provider.of<FeedViewModel>(context, listen: false);
-
-    WidgetsBinding.instance?.addPostFrameCallback((_) => _vm.loadData(context));
-  }
-
+class name extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var scaffoldKey = GlobalKey<ScaffoldState>();
@@ -28,86 +12,78 @@ class _FeedViewState extends State<FeedView> {
 
     return Scaffold(
       key: scaffoldKey,
+      appBar: _vm.isLoading
+          ? null
+          : AppBar(
+              leading: IconButton(
+                onPressed: () {
+                  scaffoldKey.currentState?.openDrawer();
+                },
+                icon: CircleAvatar(
+                  backgroundColor: AppTheme.primary,
+                  radius: 32,
+                  child: _vm.users.isEmpty
+                      ? const Text("U")
+                      : _vm.users[0].foto == null || _vm.users[0].foto == ""
+                          ? Text(_vm.users[0].userName[0].toUpperCase())
+                          : FadeInImage(
+                              placeholder: const AssetImage(
+                                "assets/user.png",
+                              ),
+                              image: NetworkImage(
+                                _vm.users[0].foto,
+                              ),
+                            ),
+                ),
+              ),
+            ),
       drawer: _MyDrawer(),
       body: _vm.isLoading
           ? const LoadWidget()
-          : Stack(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 250,
-                    left: 20,
-                    right: 20,
-                    bottom: 20,
-                  ),
-                  child: RefreshIndicator(
-                    onRefresh: () => _vm.loadData(context),
-                    child: _vm.users.isEmpty
-                        ? ListView(
-                            children: const [
-                              SizedBox(height: 75),
-                              NotFoundWidget(),
-                            ],
-                          )
-                        : ListView(
-                            children: [Text("data")],
-                          ),
-                  ),
-                ),
-                Stack(
-                  children: [
-                    Stack(
+          : RefreshIndicator(
+              onRefresh: () => _vm.loadData(context),
+              child: _vm.users.isEmpty
+                  ? ListView(
+                      children: const [
+                        SizedBox(height: 75),
+                        NotFoundWidget(),
+                      ],
+                    )
+                  : ListView(
                       children: [
-                        FadeInImage(
-                          placeholder: AssetImage("assets/banner.png"),
-                          image: NetworkImage(
-                              "https://ds.demosoftonline.com/host/la_carreta/BusinessAdvantage/UploadFile/ghvlbqmmknzkolzy4xou0kxm85135.jpg"),
+                        Container(
+                          height: 200,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                  'https://ds.demosoftonline.com/host/la_carreta/BusinessAdvantage/UploadFile/ghvlbqmmknzkolzy4xou0kxm85135.jpg'),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(16.0),
+                          child: Column(
+                            children: [
+                              // Contenido de la pantalla
+                              Text(
+                                'Título',
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(height: 16),
+                              Text(
+                                'Descripción',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                              // Agrega más widgets según tu diseño
+                            ],
+                          ),
                         ),
                       ],
                     ),
-                    Container(
-                      height: 250.0,
-                      // decoration: BoxDecoration(
-                      //   gradient: LinearGradient(
-                      //       colors: [Color(0xFF4268D3), Color(0xFF584CD1)],
-                      //       begin: FractionalOffset(0.2, 0.0),
-                      //       end: FractionalOffset(1.0, 0.6),
-                      //       stops: [0.0, 0.6],
-                      //       tileMode: TileMode.clamp),
-                      // ),
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: AssetImage("assets/banner.png")),
-                      ),
-                      child: IconButton(
-                        iconSize: 50,
-                        onPressed: () {
-                          scaffoldKey.currentState?.openDrawer();
-                        },
-                        icon: CircleAvatar(
-                          backgroundColor: AppTheme.primary,
-                          radius: 32,
-                          child: _vm.users.isEmpty
-                              ? const Text("U")
-                              : _vm.users[0].foto == null ||
-                                      _vm.users[0].foto == ""
-                                  ? Text(_vm.users[0].userName[0].toUpperCase())
-                                  : FadeInImage(
-                                      placeholder: const AssetImage(
-                                        "assets/user.png",
-                                      ),
-                                      image: NetworkImage(
-                                        _vm.users[0].foto,
-                                      ),
-                                    ),
-                        ),
-                      ),
-                      alignment: Alignment(-0.9, -0.4),
-                    )
-                  ],
-                )
-              ],
             ),
     );
   }
@@ -162,7 +138,9 @@ class _MyDrawer extends StatelessWidget {
           Expanded(
             child: _vm.users.isEmpty
                 ? ListView(
-                    children: const [NotFoundWidget()],
+                    children: const [
+                      NotFoundWidget(),
+                    ],
                   )
                 : ListView(
                     padding: EdgeInsets.zero,
