@@ -1,12 +1,16 @@
 import 'package:fl_comunicacion/themes/app_theme.dart';
+import 'package:fl_comunicacion/view_models/home_view_model.dart';
 import 'package:fl_comunicacion/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final _vm = Provider.of<HomeViewModel>(context);
+
     return Scaffold(
       bottomNavigationBar: GestureDetector(
         onTap: () => Navigator.pushNamed(context, 'feed'),
@@ -46,7 +50,7 @@ class HomeView extends StatelessWidget {
       appBar: AppBar(
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () => _vm.logout(context),
             icon: const Icon(
               Icons.logout,
             ),
