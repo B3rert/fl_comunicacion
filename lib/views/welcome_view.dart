@@ -121,7 +121,7 @@ class _WelcomeViewState extends State<WelcomeView> {
                         ),
                         Center(
                           child: Text(
-                            formatDate(_vm.mensajes[0].fechaHora),
+                            _formatDate(_vm.mensajes[0].fechaHora),
                             style: const TextStyle(color: Colors.grey),
                           ),
                         ),
@@ -133,7 +133,7 @@ class _WelcomeViewState extends State<WelcomeView> {
 }
 
 //Funcion formatear fecha con intl
-String formatDate(String date) {
+String _formatDate(String date) {
   var parsedDate = DateTime.parse(date);
 
   String datetime1 = DateFormat("dd/MM/yyyy hh:mm").format(parsedDate);

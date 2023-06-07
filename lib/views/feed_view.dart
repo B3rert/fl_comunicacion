@@ -1,7 +1,10 @@
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:fl_comunicacion/models/models.dart';
 import 'package:fl_comunicacion/themes/app_theme.dart';
 import 'package:fl_comunicacion/view_models/feed_view_model.dart';
 import 'package:fl_comunicacion/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class FeedView extends StatefulWidget {
@@ -28,10 +31,12 @@ class _FeedViewState extends State<FeedView> {
     return Scaffold(
       key: scaffoldKey,
       drawer: _MyDrawer(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: const Icon(Icons.add),
-      ),
+      floatingActionButton: _vm.isLoading
+          ? null
+          : FloatingActionButton(
+              onPressed: () {},
+              child: const Icon(Icons.add),
+            ),
       body: _vm.isLoading
           ? const LoadWidget()
           : Stack(
@@ -45,40 +50,39 @@ class _FeedViewState extends State<FeedView> {
                   ),
                   child: RefreshIndicator(
                     onRefresh: () => _vm.loadData(context),
-                    child: _vm.users.isEmpty
-                        ? ListView(
-                            children: const [
-                              SizedBox(height: 75),
-                              NotFoundWidget(),
-                            ],
-                          )
-                        : ListView(
-                            children: [
-                              CardWidget(
-                                color: AppTheme.backroundColor,
-                                width: double.infinity,
-                                height: 190,
-                                raidus: 22,
-                                child: _HeaderDrawer(
-                                  backgroundIcon: AppTheme.primary,
-                                  textColor: Colors.black,
-                                  color: AppTheme.backroundColor,
-                                ),
-                              ),
-                              _Post(),
-                              _Post(),
-                              _Post(),
-                              _Post(),
-                              _Post(),
-                              _Post(),
-                              _Post(),
-                              _Post(),
-                              _Post(),
-                              _Post(),
-                              _Post(),
-                              _Post(),
-                            ],
+                    child: ListView(
+                      children: [
+                        GestureDetector(
+                          onTap: () => scaffoldKey.currentState?.openDrawer(),
+                          child: CardWidget(
+                            color: AppTheme.backroundColor,
+                            width: double.infinity,
+                            height: 190,
+                            raidus: 22,
+                            child: _HeaderDrawer(
+                              backgroundIcon: AppTheme.primary,
+                              textColor: Colors.black,
+                              color: AppTheme.backroundColor,
+                            ),
                           ),
+                        ),
+                        if (_vm.posts.isEmpty) const SizedBox(height: 75),
+                        if (_vm.posts.isEmpty) const NotFoundWidget(),
+                        if (_vm.posts.isNotEmpty)
+                          ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            itemCount: _vm.posts.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return _Post(
+                                post: _vm.posts[index],
+                                index: index,
+                              );
+                            },
+                          ),
+                      ],
+                    ),
                   ),
                 ),
                 Stack(
@@ -143,7 +147,12 @@ class _FeedViewState extends State<FeedView> {
 class _Post extends StatelessWidget {
   const _Post({
     Key? key,
+    required this.post,
+    required this.index,
   }) : super(key: key);
+
+  final PostModel post;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
@@ -155,52 +164,76 @@ class _Post extends StatelessWidget {
       color: AppTheme.backroundColorSecondary,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-        child: Row(
+        child: Column(
           children: [
-            Container(
-              width: 50,
-              height: 50,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: AssetImage("assets/user.png"),
+            Row(
+              children: [
+                Container(
+                  width: 50,
+                  height: 50,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: AssetImage("assets/user.png"),
+                    ),
+                  ),
                 ),
-              ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(left: 20.0),
+                        child: Text(
+                          post.userName,
+                          textAlign: TextAlign.left,
+                          style: const TextStyle(
+                            fontSize: 17.0,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(left: 20.0, top: 10),
+                        child: Text(
+                          post.descripcion,
+                          textAlign: TextAlign.left,
+                          style: const TextStyle(
+                            fontSize: 13.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(left: 20.0, top: 10),
+                        child: Text(
+                          post.observacion1,
+                          textAlign: TextAlign.left,
+                          style: const TextStyle(
+                            fontSize: 13.0,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(left: 20.0, top: 10),
+                        child: Text(
+                          _formatDate(post.fechaHora),
+                          textAlign: TextAlign.left,
+                          style: const TextStyle(
+                            fontSize: 13.0,
+                            color: Color(0xFFa3a5a7),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
             ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(left: 20.0),
-                    child: const Text(
-                      "name",
-                      textAlign: TextAlign.left,
-                      style: TextStyle(fontSize: 17.0, fontFamily: "Latom"),
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(left: 20.0),
-                    child: const Text(
-                      "details",
-                      textAlign: TextAlign.left,
-                      style:
-                          TextStyle(fontSize: 13.0, color: Color(0xFFa3a5a7)),
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(left: 20.0),
-                    child: const Text(
-                      "Consequat deserunt velit nisi tempor amet dolor consectetur quis. Amet laborum non ad qui duis irure. Ullamco dolor sunt incididunt eiusmod cupidatat ut nulla laboris aute sint tempor. Dolor commodo veniam in fugiat mollit proident sint amet culpa ut. Incididunt Lorem sunt incididunt ullamco deserunt elit ea laboris. Qui eu dolor consequat laboris veniam dolor aute eu est. Nulla minim pariatur nostrud amet ex laboris magna pariatur nostrud eu labore laborum adipisicing.",
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                          fontSize: 13.0, fontWeight: FontWeight.w900),
-                    ),
-                  )
-                ],
-              ),
-            )
+            const SizedBox(height: 20),
+            //TODO:Validar fotos,
+            if (index != 0) _MyCarousel()
           ],
         ),
       ),
@@ -352,4 +385,49 @@ class _InfoUser extends StatelessWidget {
       ),
     );
   }
+}
+
+class _MyCarousel extends StatelessWidget {
+  //TODO: revisar error en imagenes
+  final List<String> images = [
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/640px-No-Image-Placeholder.svg.png',
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/640px-No-Image-Placeholder.svg.png',
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/640px-No-Image-Placeholder.svg.png',
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return CarouselSlider(
+      options: CarouselOptions(
+        height: 400.0,
+        pageSnapping: true,
+      ),
+      items: images.map((String image) {
+        return Builder(
+          builder: (BuildContext context) {
+            return FadeInImage(
+              image: NetworkImage(image),
+              placeholder: const AssetImage("assets/load.gif"),
+              imageErrorBuilder: (context, error, stackTrace) {
+                return Image.asset(
+                  'assets/placeimg.jpg',
+                  fit: BoxFit.cover,
+                );
+              },
+              fit: BoxFit.cover,
+            );
+          },
+        );
+      }).toList(),
+    );
+  }
+}
+
+//Funcion formatear fecha con intl
+String _formatDate(String date) {
+  var parsedDate = DateTime.parse(date);
+
+  String datetime1 = DateFormat("dd/MM/yyyy hh:mm").format(parsedDate);
+
+  return datetime1;
 }
