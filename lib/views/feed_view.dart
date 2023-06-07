@@ -215,17 +215,6 @@ class _Post extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Container(
-                        margin: const EdgeInsets.only(left: 20.0, top: 10),
-                        child: Text(
-                          _formatDate(post.fechaHora),
-                          textAlign: TextAlign.left,
-                          style: const TextStyle(
-                            fontSize: 13.0,
-                            color: Color(0xFFa3a5a7),
-                          ),
-                        ),
-                      ),
                     ],
                   ),
                 )
@@ -233,7 +222,32 @@ class _Post extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             //TODO:Validar fotos,
-            if (index != 0) _MyCarousel()
+            if (index != 0) _MyCarousel(),
+
+            Container(
+              margin: const EdgeInsets.only(left: 20.0, top: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "${post.cantidadComentarios} Comentarios",
+                    textAlign: TextAlign.left,
+                    style: const TextStyle(
+                      fontSize: 13.0,
+                      color: Color(0xFFa3a5a7),
+                    ),
+                  ),
+                  Text(
+                    _formatDate(post.fechaHora),
+                    textAlign: TextAlign.left,
+                    style: const TextStyle(
+                      fontSize: 13.0,
+                      color: Color(0xFFa3a5a7),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
