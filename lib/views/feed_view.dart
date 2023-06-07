@@ -1,4 +1,3 @@
-import 'package:fl_comunicacion/models/info_user_model.dart';
 import 'package:fl_comunicacion/themes/app_theme.dart';
 import 'package:fl_comunicacion/view_models/feed_view_model.dart';
 import 'package:fl_comunicacion/widgets/widgets.dart';
@@ -29,6 +28,10 @@ class _FeedViewState extends State<FeedView> {
     return Scaffold(
       key: scaffoldKey,
       drawer: _MyDrawer(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: const Icon(Icons.add),
+      ),
       body: _vm.isLoading
           ? const LoadWidget()
           : Stack(
@@ -51,7 +54,29 @@ class _FeedViewState extends State<FeedView> {
                           )
                         : ListView(
                             children: [
-                              Text("data"),
+                              CardWidget(
+                                color: AppTheme.backroundColor,
+                                width: double.infinity,
+                                height: 190,
+                                raidus: 22,
+                                child: _HeaderDrawer(
+                                  backgroundIcon: AppTheme.primary,
+                                  textColor: Colors.black,
+                                  color: AppTheme.backroundColor,
+                                ),
+                              ),
+                              _Post(),
+                              _Post(),
+                              _Post(),
+                              _Post(),
+                              _Post(),
+                              _Post(),
+                              _Post(),
+                              _Post(),
+                              _Post(),
+                              _Post(),
+                              _Post(),
+                              _Post(),
                             ],
                           ),
                   ),
@@ -105,12 +130,80 @@ class _FeedViewState extends State<FeedView> {
                                     ),
                         ),
                       ),
-                      alignment: Alignment(-0.9, -0.4),
+                      alignment: const Alignment(-0.9, -0.4),
                     )
                   ],
                 )
               ],
             ),
+    );
+  }
+}
+
+class _Post extends StatelessWidget {
+  const _Post({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5),
+      ),
+      clipBehavior: Clip.antiAlias,
+      color: AppTheme.backroundColorSecondary,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+        child: Row(
+          children: [
+            Container(
+              width: 50,
+              height: 50,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: AssetImage("assets/user.png"),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(left: 20.0),
+                    child: const Text(
+                      "name",
+                      textAlign: TextAlign.left,
+                      style: TextStyle(fontSize: 17.0, fontFamily: "Latom"),
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(left: 20.0),
+                    child: const Text(
+                      "details",
+                      textAlign: TextAlign.left,
+                      style:
+                          TextStyle(fontSize: 13.0, color: Color(0xFFa3a5a7)),
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(left: 20.0),
+                    child: const Text(
+                      "Consequat deserunt velit nisi tempor amet dolor consectetur quis. Amet laborum non ad qui duis irure. Ullamco dolor sunt incididunt eiusmod cupidatat ut nulla laboris aute sint tempor. Dolor commodo veniam in fugiat mollit proident sint amet culpa ut. Incididunt Lorem sunt incididunt ullamco deserunt elit ea laboris. Qui eu dolor consequat laboris veniam dolor aute eu est. Nulla minim pariatur nostrud amet ex laboris magna pariatur nostrud eu labore laborum adipisicing.",
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          fontSize: 13.0, fontWeight: FontWeight.w900),
+                    ),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }
@@ -124,42 +217,10 @@ class _MyDrawer extends StatelessWidget {
       backgroundColor: AppTheme.backroundColor,
       child: Column(
         children: [
-          UserAccountsDrawerHeader(
-            decoration: const BoxDecoration(
-              color: AppTheme.primary,
-            ),
-            accountName: Text(
-              _vm.users.isEmpty || _vm.users[0].userName.isEmpty
-                  ? "No disponible"
-                  : _vm.users[0].userName,
-            ),
-            accountEmail: Text(
-              _vm.users.isEmpty || _vm.users[0].eMail.isEmpty
-                  ? "No disponible"
-                  : _vm.users[0].eMail,
-            ),
-            currentAccountPicture: CircleAvatar(
-              backgroundColor: AppTheme.backroundColorSecondary,
-              radius: 32,
-              child: _vm.users.isEmpty
-                  ? const Text(
-                      "U",
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )
-                  : _vm.users[0].foto == null || _vm.users[0].foto == ""
-                      ? Text(_vm.users[0].userName[0].toUpperCase())
-                      : FadeInImage(
-                          placeholder: const AssetImage(
-                            "assets/user.png",
-                          ),
-                          image: NetworkImage(
-                            _vm.users[0].foto,
-                          ),
-                        ),
-            ),
+          _HeaderDrawer(
+            color: AppTheme.primary,
+            backgroundIcon: AppTheme.backroundColor,
+            textColor: Colors.white,
           ),
           Expanded(
             child: _vm.users.isEmpty
@@ -208,6 +269,64 @@ class _MyDrawer extends StatelessWidget {
                 )),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _HeaderDrawer extends StatelessWidget {
+  const _HeaderDrawer({
+    Key? key,
+    required this.color,
+    required this.textColor,
+    required this.backgroundIcon,
+  }) : super(key: key);
+
+  final Color color;
+  final Color textColor;
+  final Color backgroundIcon;
+
+  @override
+  Widget build(BuildContext context) {
+    final _vm = Provider.of<FeedViewModel>(context);
+
+    return UserAccountsDrawerHeader(
+      decoration: BoxDecoration(
+        color: color,
+      ),
+      accountName: Text(
+        _vm.users.isEmpty || _vm.users[0].userName.isEmpty
+            ? "No disponible"
+            : _vm.users[0].userName,
+        style: TextStyle(color: textColor),
+      ),
+      accountEmail: Text(
+        _vm.users.isEmpty || _vm.users[0].eMail.isEmpty
+            ? "No disponible"
+            : _vm.users[0].eMail,
+        style: TextStyle(color: textColor),
+      ),
+      currentAccountPicture: CircleAvatar(
+        backgroundColor: backgroundIcon,
+        radius: 32,
+        child: _vm.users.isEmpty
+            ? const Text(
+                "U",
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
+              )
+            : _vm.users[0].foto == null || _vm.users[0].foto == ""
+                ? Text(_vm.users[0].userName[0].toUpperCase())
+                : FadeInImage(
+                    placeholder: const AssetImage(
+                      "assets/user.png",
+                    ),
+                    image: NetworkImage(
+                      _vm.users[0].foto,
+                    ),
+                  ),
       ),
     );
   }

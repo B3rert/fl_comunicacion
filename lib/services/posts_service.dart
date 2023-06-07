@@ -1,50 +1,49 @@
 import 'dart:convert';
 import 'package:fl_comunicacion/models/models.dart';
 import 'package:fl_comunicacion/shared_preferences/preferences.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class PublicacionService extends ChangeNotifier {
+class PostService {
   // Url del servidor
   final String _baseUrl = Preferences.baseUrl;
   //path
   final String _path = Preferences.path;
 
-  // Consume el Api
-  Future<ApiResModel> postLogin(
-      String token, PublicacionPostModel publicacion) async {
-    //  Consumo del Api
+  Future<ApiResModel> getPosts(
+    String user,
+    String token,
+  ) async {
     try {
-      // Arma Url del Api
-      final url = Uri.https(
-          _baseUrl, "${_path.isEmpty ? '' : _path + '/'}api/Publicacion");
-      // Configurar Api y consumirla
-      final response = await http.post(
+      Uri url;
+      if (Preferences.prefix == 'https') {
+        url = Uri.https(_baseUrl,
+            "${_path.isEmpty ? '' : _path + '/'}api/Publicacion/$user");
+      } else {
+        url = Uri.http(_baseUrl,
+            "${_path.isEmpty ? '' : _path + '/'}api/Publicacion/$user");
+      }
+
+      final response = await http.get(
         url,
-        body: publicacion.toJson(),
         headers: {
-          "Content-Type": "application/json",
           "Authorization": "bearer $token",
         },
       );
-
       final resJson = json.decode(response.body);
 
-      List<PublicacionGetModel> publicaciones = [];
+      List<PostModel> posts = [];
 
       //recorrer lista api Y  agregar a lista local
       for (var item in resJson) {
-        //JSON a map
-        Map<String, dynamic> application = item;
         //Tipar a map
-        final responseFinally = PublicacionGetModel.fromMap(application);
+        final responseFinally = PostModel.fromMap(item);
         //agregar item a la lista
-        publicaciones.add(responseFinally);
+        posts.add(responseFinally);
       }
 
       return ApiResModel(
         succes: true,
-        message: publicaciones,
+        message: posts,
       );
     } catch (e) {
       return ApiResModel(

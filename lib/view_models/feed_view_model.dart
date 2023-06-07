@@ -9,6 +9,7 @@ class FeedViewModel extends ChangeNotifier {
   bool isLoading = false;
   final List<InfoUserModel> users = [];
   final List<BannerModel> banners = [];
+  final List<PostModel> posts = [];
 
   loadData(BuildContext context) async {
     final _loginVM = Provider.of<LoginViewModel>(context, listen: false);
@@ -41,9 +42,35 @@ class FeedViewModel extends ChangeNotifier {
       );
       return;
     }
+
     BannerService bannerService = BannerService();
 
     ApiResModel resBanner = await bannerService.getBanner(
+      _loginVM.nameUser,
+      _loginVM.token,
+    );
+
+    //valid succes response
+    if (!resBanner.succes) {
+      //stop prosses
+      isLoading = false;
+      notifyListeners();
+
+      showDialog(
+        context: context,
+        builder: (context) => AlertInfoWidget(
+          title: "Algo salió mal",
+          description:
+              "No se pudo completar el proceso de conexión al servicio. Por favor, inténtalo de nuevo más tarde.",
+          onOk: () => Navigator.pop(context),
+        ),
+      );
+      return;
+    }
+
+    PostService postService = PostService();
+
+    ApiResModel resPost = await postService.getPosts(
       _loginVM.nameUser,
       _loginVM.token,
     );
@@ -53,7 +80,7 @@ class FeedViewModel extends ChangeNotifier {
     notifyListeners();
 
     //valid succes response
-    if (!resBanner.succes) {
+    if (!resPost.succes) {
       showDialog(
         context: context,
         builder: (context) => AlertInfoWidget(
@@ -72,6 +99,9 @@ class FeedViewModel extends ChangeNotifier {
 
     banners.clear();
     banners.addAll(resBanner.message);
+
+    posts.clear();
+    posts.addAll(resPost.message);
   }
 
   logout(BuildContext context) {
