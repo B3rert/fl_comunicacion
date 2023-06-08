@@ -52,4 +52,49 @@ class PostService {
       );
     }
   }
+
+  Future<ApiResModel> getComments(
+    String user,
+    String token,
+    int tarea,
+  ) async {
+    try {
+      Uri url;
+      if (Preferences.prefix == 'https') {
+        url = Uri.https(_baseUrl,
+            "${_path.isEmpty ? '' : _path + '/'}api/Publicacion/comentarios/$user/$tarea");
+      } else {
+        url = Uri.http(_baseUrl,
+            "${_path.isEmpty ? '' : _path + '/'}api/Publicacion/comentarios/$user/$tarea");
+      }
+
+      final response = await http.get(
+        url,
+        headers: {
+          "Authorization": "bearer $token",
+        },
+      );
+      final resJson = json.decode(response.body);
+
+      List<CommentModel> comments = [];
+
+      //recorrer lista api Y  agregar a lista local
+      for (var item in resJson) {
+        //Tipar a map
+        final responseFinally = CommentModel.fromMap(item);
+        //agregar item a la lista
+        comments.add(responseFinally);
+      }
+
+      return ApiResModel(
+        succes: true,
+        message: comments,
+      );
+    } catch (e) {
+      return ApiResModel(
+        succes: false,
+        message: e.toString(),
+      );
+    }
+  }
 }
