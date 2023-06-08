@@ -51,6 +51,7 @@ class InputWidget extends StatelessWidget {
               return 'Campo requerido.';
             }
           }
+          return null;
         },
       ),
     );

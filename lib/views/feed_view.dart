@@ -21,7 +21,7 @@ class _FeedViewState extends State<FeedView> {
     super.initState();
     final _vm = Provider.of<FeedViewModel>(context, listen: false);
 
-    WidgetsBinding.instance?.addPostFrameCallback((_) => _vm.loadData(context));
+    WidgetsBinding.instance.addPostFrameCallback((_) => _vm.loadData(context));
   }
 
   @override
