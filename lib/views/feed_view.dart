@@ -67,18 +67,6 @@ class _FeedViewState extends State<FeedView> {
                             ),
                           ),
                         ),
-                        AnyLinkPreview(
-                          link: "https://www.youtube.com/watch?v=4-7jSoINyq4",
-                          displayDirection: UIDirection.uiDirectionHorizontal,
-                          cache: Duration(hours: 1),
-                          backgroundColor: Colors.grey[300],
-                          errorWidget: Container(
-                            color: Colors.grey[300],
-                            child: Text('Oops!'),
-                          ),
-                          errorImage:
-                              "https://i.ytimg.com/vi/z8wrRRR7_qU/maxresdefault.jpg",
-                        ),
                         if (_vm.posts.isEmpty) const SizedBox(height: 75),
                         if (_vm.posts.isEmpty) const NotFoundWidget(),
                         if (_vm.posts.isNotEmpty)
@@ -176,6 +164,8 @@ class _Post extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _vm = Provider.of<FeedViewModel>(context);
+
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5),
@@ -185,6 +175,7 @@ class _Post extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
@@ -200,12 +191,12 @@ class _Post extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(left: 20.0),
-                        child: Text(
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
                           post.userName,
                           textAlign: TextAlign.left,
                           style: const TextStyle(
@@ -213,64 +204,94 @@ class _Post extends StatelessWidget {
                             fontWeight: FontWeight.w800,
                           ),
                         ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(left: 20.0, top: 10),
-                        child: Text(
-                          post.descripcion,
+                        Text(
+                          _formatDate(post.fechaHora),
                           textAlign: TextAlign.left,
                           style: const TextStyle(
                             fontSize: 13.0,
-                            fontWeight: FontWeight.bold,
+                            color: Color(0xFFa3a5a7),
                           ),
                         ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(left: 20.0, top: 10),
-                        child: Text(
-                          post.observacion1,
-                          textAlign: TextAlign.left,
-                          style: const TextStyle(
-                            fontSize: 13.0,
-                          ),
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                )
+                ),
               ],
             ),
             const SizedBox(height: 20),
-            //TODO:Validar fotos,
-            if (index != 0) _MyCarousel(),
 
-            Container(
-              margin: const EdgeInsets.only(left: 20.0, top: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "${post.cantidadComentarios} Comentarios",
-                    textAlign: TextAlign.left,
-                    style: const TextStyle(
-                      fontSize: 13.0,
-                      color: Color(0xFFa3a5a7),
-                    ),
-                  ),
-                  Text(
-                    _formatDate(post.fechaHora),
-                    textAlign: TextAlign.left,
-                    style: const TextStyle(
-                      fontSize: 13.0,
-                      color: Color(0xFFa3a5a7),
-                    ),
-                  ),
-                ],
+            Text(
+              post.descripcion,
+              textAlign: TextAlign.left,
+              style: const TextStyle(
+                fontSize: 13.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 10),
+
+            _ContentText(elementos: _vm.splitText(post.observacion1)),
+            const SizedBox(height: 10),
+            //TODO:Validar fotos,
+            if (index > 1) _MyCarousel(),
+            const SizedBox(height: 20),
+
+            Text(
+              "${post.cantidadComentarios} Comentarios",
+              textAlign: TextAlign.left,
+              style: const TextStyle(
+                fontSize: 13.0,
+                color: Color(0xFFa3a5a7),
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _ContentText extends StatelessWidget {
+  final List<ElementoTextoModel> elementos;
+
+  const _ContentText({
+    required this.elementos,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      itemCount: elementos.length,
+      itemBuilder: (BuildContext context, int index) {
+        final ElementoTextoModel texto = elementos[index];
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              texto.contenido,
+              style: const TextStyle(fontSize: 13),
+            ),
+            const SizedBox(height: 10),
+            if (texto.esEnlace)
+              AnyLinkPreview(
+                link: texto.contenido,
+                displayDirection: UIDirection.uiDirectionHorizontal,
+                cache: const Duration(hours: 1),
+                backgroundColor: AppTheme.backroundColor,
+                errorWidget: Container(
+                  color: AppTheme.backroundColor,
+                  child: const Text('Oops!'),
+                ),
+                errorImage:
+                    "https://i.ytimg.com/vi/z8wrRRR7_qU/maxresdefault.jpg",
+              ),
+            if (texto.esEnlace) const SizedBox(height: 10),
+          ],
+        );
+      },
     );
   }
 }
