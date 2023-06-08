@@ -1,3 +1,5 @@
+import 'package:fl_comunicacion/models/models.dart';
+import 'package:fl_comunicacion/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 class PostView extends StatelessWidget {
@@ -5,9 +7,22 @@ class PostView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text('PostView'),
+    final PostModel post =
+        ModalRoute.of(context)!.settings.arguments as PostModel;
+
+    return Scaffold(
+      appBar: AppBar(),
+      body: ListView(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                PostWidget(post: post, index: 1),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
