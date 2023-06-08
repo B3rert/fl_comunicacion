@@ -75,9 +75,16 @@ class _FeedViewState extends State<FeedView> {
                             shrinkWrap: true,
                             itemCount: _vm.posts.length,
                             itemBuilder: (BuildContext context, int index) {
-                              return _Post(
-                                post: _vm.posts[index],
-                                index: index,
+                              return GestureDetector(
+                                onTap: () => Navigator.pushNamed(
+                                  context,
+                                  "post",
+                                  arguments: _vm.posts[index],
+                                ),
+                                child: _Post(
+                                  post: _vm.posts[index],
+                                  index: index,
+                                ),
                               );
                             },
                           ),

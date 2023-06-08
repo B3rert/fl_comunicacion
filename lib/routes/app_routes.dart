@@ -1,4 +1,4 @@
-import 'package:fl_comunicacion/views/view.dart';
+import 'package:fl_comunicacion/views/views.dart';
 import 'package:flutter/material.dart';
 
 class AppRoutes {
@@ -9,6 +9,7 @@ class AppRoutes {
     initialRoute: (BuildContext context) => const LoginView(),
     'api': (BuildContext context) => const ApiView(),
     'feed': (BuildContext context) => const FeedView(),
+    'post': (BuildContext context) => const PostView(),
   };
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
