@@ -1,3 +1,4 @@
+import 'package:any_link_preview/any_link_preview.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:fl_comunicacion/models/models.dart';
 import 'package:fl_comunicacion/themes/app_theme.dart';
@@ -65,6 +66,18 @@ class _FeedViewState extends State<FeedView> {
                               color: AppTheme.backroundColor,
                             ),
                           ),
+                        ),
+                        AnyLinkPreview(
+                          link: "https://www.youtube.com/watch?v=4-7jSoINyq4",
+                          displayDirection: UIDirection.uiDirectionHorizontal,
+                          cache: Duration(hours: 1),
+                          backgroundColor: Colors.grey[300],
+                          errorWidget: Container(
+                            color: Colors.grey[300],
+                            child: Text('Oops!'),
+                          ),
+                          errorImage:
+                              "https://i.ytimg.com/vi/z8wrRRR7_qU/maxresdefault.jpg",
                         ),
                         if (_vm.posts.isEmpty) const SizedBox(height: 75),
                         if (_vm.posts.isEmpty) const NotFoundWidget(),
