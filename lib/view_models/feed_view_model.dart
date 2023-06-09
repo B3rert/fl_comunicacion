@@ -104,6 +104,47 @@ class FeedViewModel extends ChangeNotifier {
     posts.addAll(resPost.message);
   }
 
+  splitText(String texto) {
+    RegExp regExp = RegExp(
+      r"(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+\.[\w/\-?=%.]+",
+      caseSensitive: false,
+      multiLine: false,
+    );
+
+    Iterable<Match> matches = regExp.allMatches(texto);
+
+    List<ElementoTextoModel> elementos = [];
+    int lastIndex = 0;
+
+    for (Match match in matches) {
+      if (match.start > lastIndex) {
+        elementos.add(
+          ElementoTextoModel(
+            contenido: texto.substring(lastIndex, match.start),
+            esEnlace: false,
+          ),
+        );
+      }
+      elementos.add(
+        ElementoTextoModel(
+          contenido: match.group(0)!,
+          esEnlace: true,
+        ),
+      );
+      lastIndex = match.end;
+    }
+
+    if (lastIndex < texto.length) {
+      elementos.add(
+        ElementoTextoModel(
+          contenido: texto.substring(lastIndex),
+          esEnlace: false,
+        ),
+      );
+    }
+    return elementos;
+  }
+
   logout(BuildContext context) {
     final _loginVM = Provider.of<LoginViewModel>(context, listen: false);
 

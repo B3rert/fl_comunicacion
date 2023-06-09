@@ -1,10 +1,8 @@
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:fl_comunicacion/models/models.dart';
 import 'package:fl_comunicacion/themes/app_theme.dart';
 import 'package:fl_comunicacion/view_models/feed_view_model.dart';
+import 'package:fl_comunicacion/view_models/view_models.dart';
 import 'package:fl_comunicacion/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class FeedView extends StatefulWidget {
@@ -20,7 +18,7 @@ class _FeedViewState extends State<FeedView> {
     super.initState();
     final _vm = Provider.of<FeedViewModel>(context, listen: false);
 
-    WidgetsBinding.instance?.addPostFrameCallback((_) => _vm.loadData(context));
+    WidgetsBinding.instance.addPostFrameCallback((_) => _vm.loadData(context));
   }
 
   @override
@@ -76,12 +74,21 @@ class _FeedViewState extends State<FeedView> {
                             itemCount: _vm.posts.length,
                             itemBuilder: (BuildContext context, int index) {
                               return GestureDetector(
-                                onTap: () => Navigator.pushNamed(
-                                  context,
-                                  "post",
-                                  arguments: _vm.posts[index],
-                                ),
-                                child: _Post(
+                                onTap: () {
+                                  final _postVM = Provider.of<PostViewModel>(
+                                      context,
+                                      listen: false);
+
+                                  _postVM.loadData(
+                                      context, _vm.posts[index].tarea);
+
+                                  Navigator.pushNamed(
+                                    context,
+                                    "post",
+                                    arguments: _vm.posts[index],
+                                  );
+                                },
+                                child: PostWidget(
                                   post: _vm.posts[index],
                                   index: index,
                                 ),
@@ -147,117 +154,6 @@ class _FeedViewState extends State<FeedView> {
                 )
               ],
             ),
-    );
-  }
-}
-
-class _Post extends StatelessWidget {
-  const _Post({
-    Key? key,
-    required this.post,
-    required this.index,
-  }) : super(key: key);
-
-  final PostModel post;
-  final int index;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(5),
-      ),
-      clipBehavior: Clip.antiAlias,
-      color: AppTheme.backroundColorSecondary,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Container(
-                  width: 50,
-                  height: 50,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: AssetImage("assets/user.png"),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(left: 20.0),
-                        child: Text(
-                          post.userName,
-                          textAlign: TextAlign.left,
-                          style: const TextStyle(
-                            fontSize: 17.0,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(left: 20.0, top: 10),
-                        child: Text(
-                          post.descripcion,
-                          textAlign: TextAlign.left,
-                          style: const TextStyle(
-                            fontSize: 13.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(left: 20.0, top: 10),
-                        child: Text(
-                          post.observacion1,
-                          textAlign: TextAlign.left,
-                          style: const TextStyle(
-                            fontSize: 13.0,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-            const SizedBox(height: 20),
-            //TODO:Validar fotos,
-            if (index != 0) _MyCarousel(),
-
-            Container(
-              margin: const EdgeInsets.only(left: 20.0, top: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "${post.cantidadComentarios} Comentarios",
-                    textAlign: TextAlign.left,
-                    style: const TextStyle(
-                      fontSize: 13.0,
-                      color: Color(0xFFa3a5a7),
-                    ),
-                  ),
-                  Text(
-                    _formatDate(post.fechaHora),
-                    textAlign: TextAlign.left,
-                    style: const TextStyle(
-                      fontSize: 13.0,
-                      color: Color(0xFFa3a5a7),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
@@ -406,49 +302,4 @@ class _InfoUser extends StatelessWidget {
       ),
     );
   }
-}
-
-class _MyCarousel extends StatelessWidget {
-  //TODO: revisar error en imagenes
-  final List<String> images = [
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/640px-No-Image-Placeholder.svg.png',
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/640px-No-Image-Placeholder.svg.png',
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/640px-No-Image-Placeholder.svg.png',
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return CarouselSlider(
-      options: CarouselOptions(
-        height: 400.0,
-        pageSnapping: true,
-      ),
-      items: images.map((String image) {
-        return Builder(
-          builder: (BuildContext context) {
-            return FadeInImage(
-              image: NetworkImage(image),
-              placeholder: const AssetImage("assets/load.gif"),
-              imageErrorBuilder: (context, error, stackTrace) {
-                return Image.asset(
-                  'assets/placeimg.jpg',
-                  fit: BoxFit.cover,
-                );
-              },
-              fit: BoxFit.cover,
-            );
-          },
-        );
-      }).toList(),
-    );
-  }
-}
-
-//Funcion formatear fecha con intl
-String _formatDate(String date) {
-  var parsedDate = DateTime.parse(date);
-
-  String datetime1 = DateFormat("dd/MM/yyyy hh:mm").format(parsedDate);
-
-  return datetime1;
 }

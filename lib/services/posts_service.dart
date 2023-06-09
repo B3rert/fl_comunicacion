@@ -52,4 +52,95 @@ class PostService {
       );
     }
   }
+
+  Future<ApiResModel> getComments(
+    String user,
+    String token,
+    int tarea,
+  ) async {
+    try {
+      Uri url;
+      if (Preferences.prefix == 'https') {
+        url = Uri.https(_baseUrl,
+            "${_path.isEmpty ? '' : _path + '/'}api/Publicacion/comentarios/$user/$tarea");
+      } else {
+        url = Uri.http(_baseUrl,
+            "${_path.isEmpty ? '' : _path + '/'}api/Publicacion/comentarios/$user/$tarea");
+      }
+
+      final response = await http.get(
+        url,
+        headers: {
+          "Authorization": "bearer $token",
+        },
+      );
+      final resJson = json.decode(response.body);
+
+      List<CommentModel> comments = [];
+
+      //recorrer lista api Y  agregar a lista local
+      for (var item in resJson) {
+        //Tipar a map
+        final responseFinally = CommentModel.fromMap(item);
+        //agregar item a la lista
+        comments.add(responseFinally);
+      }
+
+      return ApiResModel(
+        succes: true,
+        message: comments,
+      );
+    } catch (e) {
+      return ApiResModel(
+        succes: false,
+        message: e.toString(),
+      );
+    }
+  }
+
+  Future<ApiResModel> getFilesComments(
+    String user,
+    String token,
+    int tarea,
+    int comentario,
+  ) async {
+    try {
+      Uri url;
+      if (Preferences.prefix == 'https') {
+        url = Uri.https(_baseUrl,
+            "${_path.isEmpty ? '' : _path + '/'}api/Publicacion/comentarios/archivos/$user/$tarea/$comentario");
+      } else {
+        url = Uri.http(_baseUrl,
+            "${_path.isEmpty ? '' : _path + '/'}api/Publicacion/comentarios/archivos/$user/$tarea/$comentario");
+      }
+
+      final response = await http.get(
+        url,
+        headers: {
+          "Authorization": "bearer $token",
+        },
+      );
+      final resJson = json.decode(response.body);
+
+      List<FilesCommentModel> files = [];
+
+      //recorrer lista api Y  agregar a lista local
+      for (var item in resJson) {
+        //Tipar a map
+        final responseFinally = FilesCommentModel.fromMap(item);
+        //agregar item a la lista
+        files.add(responseFinally);
+      }
+
+      return ApiResModel(
+        succes: true,
+        message: files,
+      );
+    } catch (e) {
+      return ApiResModel(
+        succes: false,
+        message: e.toString(),
+      );
+    }
+  }
 }

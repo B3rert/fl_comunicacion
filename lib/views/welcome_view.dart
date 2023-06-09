@@ -20,7 +20,7 @@ class _WelcomeViewState extends State<WelcomeView> {
     final _homeVM = Provider.of<WelcomeViewModel>(context, listen: false);
 
     WidgetsBinding.instance
-        ?.addPostFrameCallback((_) => _homeVM.loadData(context));
+        .addPostFrameCallback((_) => _homeVM.loadData(context));
   }
 
   @override
