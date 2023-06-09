@@ -1,5 +1,6 @@
 import 'package:fl_comunicacion/themes/app_theme.dart';
 import 'package:fl_comunicacion/view_models/feed_view_model.dart';
+import 'package:fl_comunicacion/view_models/view_models.dart';
 import 'package:fl_comunicacion/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -73,11 +74,20 @@ class _FeedViewState extends State<FeedView> {
                             itemCount: _vm.posts.length,
                             itemBuilder: (BuildContext context, int index) {
                               return GestureDetector(
-                                onTap: () => Navigator.pushNamed(
-                                  context,
-                                  "post",
-                                  arguments: _vm.posts[index],
-                                ),
+                                onTap: () {
+                                  final _postVM = Provider.of<PostViewModel>(
+                                      context,
+                                      listen: false);
+
+                                  _postVM.loadData(
+                                      context, _vm.posts[index].tarea);
+
+                                  Navigator.pushNamed(
+                                    context,
+                                    "post",
+                                    arguments: _vm.posts[index],
+                                  );
+                                },
                                 child: PostWidget(
                                   post: _vm.posts[index],
                                   index: index,

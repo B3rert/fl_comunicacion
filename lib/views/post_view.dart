@@ -24,51 +24,46 @@ class PostView extends StatelessWidget {
           ? const LoadWidget()
           : RefreshIndicator(
               onRefresh: () => _vm.loadData(context, post.tarea),
-              child: _vm.comments.isEmpty
-                  ? ListView(
-                      children: const [
-                        SizedBox(height: 75),
-                        NotFoundWidget(),
-                      ],
-                    )
-                  : ListView(
+              child: ListView(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(20),
-                          child: Column(
-                            children: [
-                              PostWidget(post: post, index: 1),
-                              ListView.builder(
-                                physics: const NeverScrollableScrollPhysics(),
-                                scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                                itemCount: _vm.comments.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  CommentModel comment = _vm.comments[index];
-                                  return Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        margin: const EdgeInsets.only(left: 50),
-                                        width: 4.0, // Ancho de la línea
-                                        height: 45.0, // Altura de la línea
-                                        color: const Color(
-                                            0xFFa3a5a7), // Color de la línea
-                                      ),
-                                      _CardComment(
-                                        comment: comment,
-                                        index: 6,
-                                      ),
-                                    ],
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
+                        PostWidget(post: post, index: 1),
+                        // if (_vm.comments.isEmpty) const SizedBox(height: 75),
+                        // if (_vm.comments.isEmpty) const NotFoundWidget(),
+                        // if (_vm.comments.isNotEmpty)
+                        ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: _vm.comments.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            CommentModel comment = _vm.comments[index];
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  margin: const EdgeInsets.only(left: 50),
+                                  width: 4.0, // Ancho de la línea
+                                  height: 45.0, // Altura de la línea
+                                  color: const Color(
+                                      0xFFa3a5a7), // Color de la línea
+                                ),
+                                _CardComment(
+                                  comment: comment,
+                                  index: 6,
+                                ),
+                              ],
+                            );
+                          },
                         ),
                       ],
                     ),
+                  ),
+                ],
+              ),
             ),
     );
   }
