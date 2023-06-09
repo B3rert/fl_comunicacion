@@ -40,7 +40,7 @@ class PostView extends StatelessWidget {
                           shrinkWrap: true,
                           itemCount: _vm.comments.length,
                           itemBuilder: (BuildContext context, int index) {
-                            CommentModel comment = _vm.comments[index];
+                            CommentPostModel comment = _vm.comments[index];
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -75,7 +75,7 @@ class _CardComment extends StatelessWidget {
     required this.index,
   });
 
-  final CommentModel comment;
+  final CommentPostModel comment;
   final int index;
 
   @override
@@ -113,7 +113,7 @@ class _CardComment extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          comment.userName,
+                          comment.comment.userName,
                           textAlign: TextAlign.left,
                           style: const TextStyle(
                             fontSize: 17.0,
@@ -121,7 +121,7 @@ class _CardComment extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          _formatDate(comment.fechaHora),
+                          _formatDate(comment.comment.fechaHora),
                           textAlign: TextAlign.left,
                           style: const TextStyle(
                             fontSize: 13.0,
@@ -138,12 +138,23 @@ class _CardComment extends StatelessWidget {
 
             _ContentText(
               elementos: _feedVM.splitText(
-                comment.comentario,
+                comment.comment.comentario,
               ),
             ),
             const SizedBox(height: 10),
             //TODO:Validar fotos,
             // _MyCarousel(),
+            Text("Archivos"),
+            ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemCount: comment.files.length,
+              itemBuilder: (BuildContext context, int index) {
+                FilesCommentModel file = comment.files[index];
+                return Text(file.objetoNombre);
+              },
+            ),
           ],
         ),
       ),

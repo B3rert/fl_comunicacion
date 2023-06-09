@@ -13,7 +13,6 @@ class CommentModel {
   String userName;
   String comentario;
   int estado;
-  List<FilesCommentModel>? files;
 
   CommentModel({
     required this.tareaComentario,
@@ -22,7 +21,6 @@ class CommentModel {
     required this.userName,
     required this.comentario,
     required this.estado,
-    this.files,
   });
 
   factory CommentModel.fromJson(String str) =>
@@ -47,4 +45,14 @@ class CommentModel {
         "comentario": comentario,
         "estado": estado,
       };
+}
+
+class CommentPostModel {
+  CommentPostModel({
+    required this.comment,
+    required this.files,
+  });
+
+  final CommentModel comment;
+  final List<FilesCommentModel> files;
 }
