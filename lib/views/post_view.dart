@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:any_link_preview/any_link_preview.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:fl_comunicacion/models/models.dart';
@@ -7,6 +9,9 @@ import 'package:fl_comunicacion/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PostView extends StatelessWidget {
   const PostView({Key? key}) : super(key: key);
@@ -144,7 +149,7 @@ class _CardComment extends StatelessWidget {
             const SizedBox(height: 10),
             //TODO:Validar fotos,
             // _MyCarousel(),
-            Text("Archivos"),
+            if (comment.files.isNotEmpty) const Text("Archivos"),
             ListView.builder(
               physics: const NeverScrollableScrollPhysics(),
               scrollDirection: Axis.vertical,
@@ -250,4 +255,64 @@ String _formatDate(String date) {
   String datetime1 = DateFormat("dd/MM/yyyy hh:mm").format(parsedDate);
 
   return datetime1;
+}
+
+class _FileDownload extends StatefulWidget {
+  final String fileUrl;
+
+  _FileDownload({required this.fileUrl});
+
+  @override
+  _FileDownloadState createState() => _FileDownloadState();
+}
+
+class _FileDownloadState extends State<_FileDownload> {
+  String? rutaArchivo;
+
+  void descargarBotonPresionado() async {
+    final urlArchivo = widget
+        .fileUrl; // Utiliza la URL del archivo proporcionada en el constructor
+    final ruta = await descargarArchivo(urlArchivo);
+
+    setState(() {
+      rutaArchivo = ruta;
+    });
+  }
+
+  void abrirBotonPresionado() {
+    if (rutaArchivo != null) {
+      launch(rutaArchivo!);
+    }
+  }
+
+  Future<String> descargarArchivo(String url) async {
+    final response = await http.get(Uri.parse(url));
+    final bytes = response.bodyBytes;
+
+    final directory = await getExternalStorageDirectory();
+    final filePath =
+        '${directory!.path}/archivo.txt'; // Cambia "archivo.txt" al nombre del archivo que deseas descargar
+
+    await File(filePath).writeAsBytes(bytes);
+
+    return filePath;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ElevatedButton(
+          onPressed: descargarBotonPresionado,
+          child: Text('Descargar archivo'),
+        ),
+        SizedBox(height: 16.0),
+        ElevatedButton(
+          onPressed: abrirBotonPresionado,
+          child: Text('Abrir archivo'),
+        ),
+      ],
+    );
+  }
 }
