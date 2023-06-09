@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:fl_comunicacion/models/models.dart';
+
 class CommentModel {
   int tareaComentario;
   int tarea;
@@ -11,6 +13,7 @@ class CommentModel {
   String userName;
   String comentario;
   int estado;
+  List<FilesCommentModel>? files;
 
   CommentModel({
     required this.tareaComentario,
@@ -19,6 +22,7 @@ class CommentModel {
     required this.userName,
     required this.comentario,
     required this.estado,
+    this.files,
   });
 
   factory CommentModel.fromJson(String str) =>
