@@ -1,3 +1,4 @@
+import 'package:fl_comunicacion/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 class NewPostView extends StatelessWidget {
@@ -5,9 +6,20 @@ class NewPostView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text('NewPostView'),
+    return Scaffold(
+      appBar: AppBar(),
+      body: const SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            children: [
+              InputWidget(
+                  maxLines: maxLines,
+                  formProperty: formProperty,
+                  formValues: formValues)
+            ],
+          ),
+        ),
       ),
     );
   }

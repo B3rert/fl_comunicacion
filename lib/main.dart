@@ -2,6 +2,7 @@ import 'package:fl_comunicacion/routes/app_routes.dart';
 import 'package:fl_comunicacion/services/services.dart';
 import 'package:fl_comunicacion/shared_preferences/preferences.dart';
 import 'package:fl_comunicacion/themes/app_theme.dart';
+import 'package:fl_comunicacion/view_models/new_post_view_model.dart';
 import 'package:fl_comunicacion/view_models/view_models.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,6 +25,7 @@ class AppState extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ApiViewModel()),
         ChangeNotifierProvider(create: (_) => FeedViewModel()),
         ChangeNotifierProvider(create: (_) => PostViewModel()),
+        ChangeNotifierProvider(create: (_) => NewPostViewModel()),
       ],
       child: const MyApp(),
     );

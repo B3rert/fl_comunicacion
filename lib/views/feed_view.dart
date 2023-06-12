@@ -1,5 +1,4 @@
 import 'package:fl_comunicacion/themes/app_theme.dart';
-import 'package:fl_comunicacion/view_models/feed_view_model.dart';
 import 'package:fl_comunicacion/view_models/view_models.dart';
 import 'package:fl_comunicacion/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +31,7 @@ class _FeedViewState extends State<FeedView> {
       floatingActionButton: _vm.isLoading
           ? null
           : FloatingActionButton(
-              onPressed: () {},
+              onPressed: () => Navigator.pushNamed(context, "newPost"),
               child: const Icon(Icons.add),
             ),
       body: _vm.isLoading
