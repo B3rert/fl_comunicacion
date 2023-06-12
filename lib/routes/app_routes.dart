@@ -10,6 +10,7 @@ class AppRoutes {
     'api': (BuildContext context) => const ApiView(),
     'feed': (BuildContext context) => const FeedView(),
     'post': (BuildContext context) => const PostView(),
+    'nePost': (BuildContext context) => const NewPostView(),
   };
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
