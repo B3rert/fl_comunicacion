@@ -9,6 +9,14 @@ class PostViewModel extends ChangeNotifier {
   bool isLoading = false;
   final List<CommentPostModel> comments = [];
 
+  addComment(
+    CommentModel comment,
+    PostModel post,
+  ) {
+    comments.add(CommentPostModel(comment: comment, files: []));
+    notifyListeners();
+  }
+
   loadData(BuildContext context, int tarea) async {
     final _loginVM = Provider.of<LoginViewModel>(context, listen: false);
 

@@ -26,6 +26,7 @@ class AppState extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => FeedViewModel()),
         ChangeNotifierProvider(create: (_) => PostViewModel()),
         ChangeNotifierProvider(create: (_) => NewPostViewModel()),
+        ChangeNotifierProvider(create: (_) => NewCommentViewModel()),
       ],
       child: const MyApp(),
     );

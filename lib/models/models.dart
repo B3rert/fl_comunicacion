@@ -1,3 +1,5 @@
+export 'package:fl_comunicacion/models/post_comment_model.dart';
+
 export 'package:fl_comunicacion/models/post_get_model.dart';
 
 export 'package:fl_comunicacion/models/post_res_model.dart';

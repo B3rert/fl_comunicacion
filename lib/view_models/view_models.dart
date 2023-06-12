@@ -1,5 +1,5 @@
+export 'package:fl_comunicacion/view_models/new_comment_view_model.dart';
 export 'package:fl_comunicacion/views/views.dart';
-
 export 'package:fl_comunicacion/view_models/post_view_model.dart';
 export 'package:fl_comunicacion/view_models/api_view_model.dart';
 export 'package:fl_comunicacion/view_models/welcome_view_model.dart';

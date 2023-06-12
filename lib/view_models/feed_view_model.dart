@@ -11,6 +11,12 @@ class FeedViewModel extends ChangeNotifier {
   final List<BannerModel> banners = [];
   final List<PostModel> posts = [];
 
+  addComment(PostModel post) {
+    int indice = posts.indexWhere((item) => item.tarea == post.tarea);
+    posts[indice].cantidadComentarios++;
+    notifyListeners();
+  }
+
   postInFeed(PostModel post) {
     posts.insert(0, post);
     notifyListeners();

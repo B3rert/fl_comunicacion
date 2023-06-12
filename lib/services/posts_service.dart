@@ -193,4 +193,54 @@ class PostService {
       );
     }
   }
+
+  // Consume el Api
+  Future<ApiResModel> posComment(
+    String token,
+    PostCommentModel comment,
+  ) async {
+    //  Consumo del Api
+    try {
+      Uri url;
+      // Arma Url del Api
+      if (Preferences.prefix == 'https') {
+        url = Uri.https(_baseUrl,
+            "${_path.isEmpty ? '' : _path + '/'}api/Publicacion/comentario");
+      } else {
+        url = Uri.http(_baseUrl,
+            "${_path.isEmpty ? '' : _path + '/'}api/Publicacion/comentario");
+      }
+
+      // Configurar Api y consumirla
+      final response = await http.post(
+        url,
+        body: comment.toJson(),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "bearer $token",
+        },
+      );
+      final resJson = json.decode(response.body);
+
+      List<CommentModel> comments = [];
+
+      //recorrer lista api Y  agregar a lista local
+      for (var item in resJson) {
+        //Tipar a map
+        final responseFinally = CommentModel.fromMap(item);
+        //agregar item a la lista
+        comments.add(responseFinally);
+      }
+
+      return ApiResModel(
+        succes: true,
+        message: comments,
+      );
+    } catch (e) {
+      return ApiResModel(
+        succes: false,
+        message: e.toString(),
+      );
+    }
+  }
 }

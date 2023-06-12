@@ -24,6 +24,14 @@ class PostView extends StatelessWidget {
     final _vm = Provider.of<PostViewModel>(context);
 
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.pushNamed(
+          context,
+          "newComment",
+          arguments: post,
+        ),
+        child: const Icon(Icons.add_comment),
+      ),
       appBar: AppBar(),
       body: _vm.isLoading
           ? const LoadWidget()

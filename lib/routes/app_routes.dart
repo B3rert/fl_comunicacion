@@ -11,6 +11,7 @@ class AppRoutes {
     'feed': (BuildContext context) => const FeedView(),
     'post': (BuildContext context) => const PostView(),
     'newPost': (BuildContext context) => const NewPostView(),
+    'newComment': (BuildContext context) => const NewCommentView(),
   };
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
