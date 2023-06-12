@@ -143,4 +143,54 @@ class PostService {
       );
     }
   }
+
+  // Consume el Api
+  Future<ApiResModel> postPost(
+    String token,
+    PostPostModel post,
+  ) async {
+    //  Consumo del Api
+    try {
+      Uri url;
+      // Arma Url del Api
+      if (Preferences.prefix == 'https') {
+        url = Uri.https(
+            _baseUrl, "${_path.isEmpty ? '' : _path + '/'}api/Publicacion");
+      } else {
+        url = Uri.http(
+            _baseUrl, "${_path.isEmpty ? '' : _path + '/'}api/Publicacion");
+      }
+
+      // Configurar Api y consumirla
+      final response = await http.post(
+        url,
+        body: post.toJson(),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "bearer $token",
+        },
+      );
+      final resJson = json.decode(response.body);
+
+      List<PostResModel> posts = [];
+
+      //recorrer lista api Y  agregar a lista local
+      for (var item in resJson) {
+        //Tipar a map
+        final responseFinally = PostResModel.fromMap(item);
+        //agregar item a la lista
+        posts.add(responseFinally);
+      }
+
+      return ApiResModel(
+        succes: true,
+        message: posts,
+      );
+    } catch (e) {
+      return ApiResModel(
+        succes: false,
+        message: e.toString(),
+      );
+    }
+  }
 }

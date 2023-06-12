@@ -25,9 +25,11 @@ class LoginService {
       }
 
       // Configurar Api y consumirla
-      final response = await http.post(url,
-          body: loginModel.toJson(),
-          headers: {"Content-Type": "application/json"});
+      final response = await http.post(
+        url,
+        body: loginModel.toJson(),
+        headers: {"Content-Type": "application/json"},
+      );
       // Asignar respuesta del Api ResLogin
       RespLogin respLogin = RespLogin.fromMap(jsonDecode(response.body));
 

@@ -11,6 +11,11 @@ class FeedViewModel extends ChangeNotifier {
   final List<BannerModel> banners = [];
   final List<PostModel> posts = [];
 
+  postInFeed(PostModel post) {
+    posts.insert(0, post);
+    notifyListeners();
+  }
+
   loadData(BuildContext context) async {
     final _loginVM = Provider.of<LoginViewModel>(context, listen: false);
 

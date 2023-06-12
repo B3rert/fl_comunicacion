@@ -12,37 +12,39 @@ class NewPostView extends StatelessWidget {
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _vm.createPost(),
+        onPressed: () => _vm.createPost(context),
         child: const Icon(Icons.save),
       ),
       appBar: AppBar(),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Form(
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            key: _vm.formKey,
-            child: Column(
-              children: [
-                InputWidget(
-                  hintText: "Titulo",
-                  labelText: "Titutlo",
-                  maxLines: 1,
-                  formProperty: "title",
-                  formValues: _vm.formValues,
+      body: _vm.isLoading
+          ? const LoadWidget()
+          : SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Form(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  key: _vm.formKey,
+                  child: Column(
+                    children: [
+                      InputWidget(
+                        hintText: "Titulo",
+                        labelText: "Titutlo",
+                        maxLines: 1,
+                        formProperty: "title",
+                        formValues: _vm.formValues,
+                      ),
+                      InputWidget(
+                        hintText: "Descripcion",
+                        labelText: "Descripcion",
+                        maxLines: 4,
+                        formProperty: "description",
+                        formValues: _vm.formValues,
+                      ),
+                    ],
+                  ),
                 ),
-                InputWidget(
-                  hintText: "Descripcion",
-                  labelText: "Descripcion",
-                  maxLines: 4,
-                  formProperty: "description",
-                  formValues: _vm.formValues,
-                ),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
     );
   }
 }
