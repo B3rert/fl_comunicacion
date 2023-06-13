@@ -83,5 +83,7 @@ class NewCommentViewModel extends ChangeNotifier {
 
     _feedVM.addComment(post);
     _postVM.addComment(comments[0], post);
+
+    formValues["title"] = "";
   }
 }

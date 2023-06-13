@@ -15,36 +15,39 @@ class NewCommentView extends StatelessWidget {
         ModalRoute.of(context)!.settings.arguments as PostModel;
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _vm.createComment(context, post),
-        child: const Icon(Icons.save),
-      ),
+      floatingActionButton: _vm.isLoading
+          ? null
+          : FloatingActionButton(
+              onPressed: () => _vm.createComment(context, post),
+              child: const Icon(Icons.save),
+            ),
       appBar: AppBar(),
       body: _vm.isLoading
           ? const LoadWidget()
           : SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(20),
-                child: Form(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  key: _vm.formKey,
-                  child: Column(
-                    children: [
-                      InputWidget(
-                        hintText: "Titulo",
-                        labelText: "Titutlo",
-                        maxLines: 1,
-                        formProperty: "title",
-                        formValues: _vm.formValues,
+                child: CardWidget(
+                  width: double.infinity,
+                  height: 220,
+                  raidus: 22,
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Form(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      key: _vm.formKey,
+                      child: Column(
+                        children: [
+                          InputWidget(
+                            hintText: "Comentario",
+                            labelText: "Comentario",
+                            maxLines: 4,
+                            formProperty: "title",
+                            formValues: _vm.formValues,
+                          ),
+                        ],
                       ),
-                      InputWidget(
-                        hintText: "Descripcion",
-                        labelText: "Descripcion",
-                        maxLines: 4,
-                        formProperty: "description",
-                        formValues: _vm.formValues,
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ),
