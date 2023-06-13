@@ -89,5 +89,8 @@ class NewPostViewModel extends ChangeNotifier {
     );
 
     _feedVM.postInFeed(post);
+
+    formValues["title"] = "";
+    formValues["description"] = "";
   }
 }

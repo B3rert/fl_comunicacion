@@ -11,37 +11,63 @@ class NewPostView extends StatelessWidget {
     final _vm = Provider.of<NewPostViewModel>(context);
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _vm.createPost(context),
-        child: const Icon(Icons.save),
-      ),
+      floatingActionButton: _vm.isLoading
+          ? null
+          : FloatingActionButton(
+              onPressed: () => _vm.createPost(context),
+              child: const Icon(Icons.save),
+            ),
       appBar: AppBar(),
       body: _vm.isLoading
           ? const LoadWidget()
           : SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(20),
-                child: Form(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  key: _vm.formKey,
-                  child: Column(
-                    children: [
-                      InputWidget(
-                        hintText: "Titulo",
-                        labelText: "Titutlo",
-                        maxLines: 1,
-                        formProperty: "title",
-                        formValues: _vm.formValues,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(left: 10),
+                      child: Text(
+                        "Nueva publicación",
+                        style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                      InputWidget(
-                        hintText: "Descripcion",
-                        labelText: "Descripcion",
-                        maxLines: 4,
-                        formProperty: "description",
-                        formValues: _vm.formValues,
+                    ),
+                    CardWidget(
+                      width: double.infinity,
+                      height: 330,
+                      raidus: 22,
+                      child: Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Form(
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          key: _vm.formKey,
+                          child: Column(
+                            children: [
+                              InputWidget(
+                                hintText: "Titulo",
+                                labelText: "Titutlo",
+                                maxLines: 1,
+                                formProperty: "title",
+                                formValues: _vm.formValues,
+                              ),
+                              InputWidget(
+                                validator: false,
+                                hintText: "Descripcion",
+                                labelText: "Descripcion",
+                                maxLines: 4,
+                                formProperty: "description",
+                                formValues: _vm.formValues,
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
