@@ -27,28 +27,39 @@ class NewCommentView extends StatelessWidget {
           : SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(20),
-                child: CardWidget(
-                  width: double.infinity,
-                  height: 220,
-                  raidus: 22,
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Form(
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      key: _vm.formKey,
-                      child: Column(
-                        children: [
-                          InputWidget(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(left: 10),
+                      child: Text(
+                        "Nuevo comentario",
+                        style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    CardWidget(
+                      width: double.infinity,
+                      height: 220,
+                      raidus: 22,
+                      child: Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Form(
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          key: _vm.formKey,
+                          child: InputWidget(
                             hintText: "Comentario",
                             labelText: "Comentario",
                             maxLines: 4,
                             formProperty: "title",
                             formValues: _vm.formValues,
                           ),
-                        ],
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
               ),
             ),
