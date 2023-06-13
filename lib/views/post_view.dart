@@ -24,14 +24,16 @@ class PostView extends StatelessWidget {
     final _vm = Provider.of<PostViewModel>(context);
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pushNamed(
-          context,
-          "newComment",
-          arguments: post,
-        ),
-        child: const Icon(Icons.add_comment),
-      ),
+      floatingActionButton: _vm.isLoading
+          ? null
+          : FloatingActionButton(
+              onPressed: () => Navigator.pushNamed(
+                context,
+                "newComment",
+                arguments: post,
+              ),
+              child: const Icon(Icons.add_comment),
+            ),
       appBar: AppBar(),
       body: _vm.isLoading
           ? const LoadWidget()
@@ -165,7 +167,13 @@ class _CardComment extends StatelessWidget {
               itemCount: comment.files.length,
               itemBuilder: (BuildContext context, int index) {
                 FilesCommentModel file = comment.files[index];
-                return Text(file.objetoNombre);
+                return ListTile(
+                    title: Text(file.objetoNombre),
+                    trailing: //archivo.descargado
+                        IconButton(
+                      icon: Icon(Icons.open_in_browser),
+                      onPressed: () {},
+                    ));
               },
             ),
           ],
