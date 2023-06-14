@@ -100,34 +100,26 @@ class PostViewModel extends ChangeNotifier {
 
       List<FilesCommentModel> files = resFile.message;
 
-      List<FilesCommentModel> imageUrls = [];
+      List<FilesCommentModel> imagenes = [];
+      List<FilesCommentModel> otrosArchivos = [];
+      List<FilesCommentModel> objetosSinExtension = [];
 
-      for (FilesCommentModel file in files) {
-        if (file.urLObjeto.endsWith('.jpg') ||
-            file.urLObjeto.endsWith('.png') ||
-            file.urLObjeto.endsWith('.jpeg')) {
-          imageUrls.add(file);
-        }
-      }
-
-      files.removeWhere((file) => imageUrls.contains(file));
-
-      comment.files.pictures.addAll(imageUrls);
-
-      List<FilesCommentModel> urlsWithoutExtension = [];
-      List<FilesCommentModel> urlsWithExtension = [];
-
-      for (FilesCommentModel file in files) {
-        if (file.urLObjeto.contains('.') && !file.urLObjeto.endsWith('/')) {
-          file.urLObjeto.contains('.'); // Check if URL contains a dot
-          urlsWithoutExtension.add(file);
+      for (FilesCommentModel objeto in files) {
+        if (objeto.objetoNombre.toLowerCase().endsWith('.jpg') ||
+            objeto.objetoNombre.toLowerCase().endsWith('.png') ||
+            objeto.objetoNombre.toLowerCase().endsWith('.gif') ||
+            objeto.objetoNombre.toLowerCase().endsWith('.jpeg')) {
+          imagenes.add(objeto);
+        } else if (objeto.objetoNombre.toLowerCase().contains('.')) {
+          otrosArchivos.add(objeto);
         } else {
-          urlsWithExtension.add(file);
+          objetosSinExtension.add(objeto);
         }
       }
 
-      comment.files.documents.addAll(urlsWithExtension);
-      comment.files.others.addAll(urlsWithoutExtension);
+      comment.files.pictures.addAll(imagenes);
+      comment.files.documents.addAll(otrosArchivos);
+      comment.files.pictures.addAll(objetosSinExtension);
     }
 
     //stop prosses

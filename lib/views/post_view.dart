@@ -158,8 +158,10 @@ class _CardComment extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             //TODO:Validar fotos,
-            // _MyCarousel(),
-            if (comment.files.documents.isNotEmpty) const Text("Archivos"),
+            if (comment.files.pictures.isNotEmpty)
+              _MyCarousel(images: comment.files.pictures),
+
+            if (comment.files.documents.isNotEmpty) const Text("Documentos"),
             if (comment.files.documents.isNotEmpty)
               ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
@@ -168,6 +170,19 @@ class _CardComment extends StatelessWidget {
                 itemCount: comment.files.documents.length,
                 itemBuilder: (BuildContext context, int index) {
                   FilesCommentModel file = comment.files.documents[index];
+                  return Text(file.objetoNombre);
+                },
+              ),
+
+            if (comment.files.others.isNotEmpty) const Text("Otros"),
+            if (comment.files.others.isNotEmpty)
+              ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: comment.files.others.length,
+                itemBuilder: (BuildContext context, int index) {
+                  FilesCommentModel file = comment.files.others[index];
                   return Text(file.objetoNombre);
                 },
               ),
@@ -223,38 +238,70 @@ class _ContentText extends StatelessWidget {
   }
 }
 
-class _MyCarousel extends StatelessWidget {
-  //TODO: revisar error en imagenes
-  final List<String> images = [
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/640px-No-Image-Placeholder.svg.png',
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/640px-No-Image-Placeholder.svg.png',
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/640px-No-Image-Placeholder.svg.png',
-  ];
+class _MyCarousel extends StatefulWidget {
+  final List<FilesCommentModel> images;
+
+  const _MyCarousel({required this.images});
+
+  @override
+  State<_MyCarousel> createState() => _MyCarouselState();
+}
+
+class _MyCarouselState extends State<_MyCarousel> {
+  int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    return CarouselSlider(
-      options: CarouselOptions(
-        height: 400.0,
-        pageSnapping: true,
-      ),
-      items: images.map((String image) {
-        return Builder(
-          builder: (BuildContext context) {
-            return FadeInImage(
-              image: NetworkImage(image),
-              placeholder: const AssetImage("assets/load.gif"),
-              imageErrorBuilder: (context, error, stackTrace) {
-                return Image.asset(
-                  'assets/placeimg.jpg',
+    return Column(
+      children: [
+        CarouselSlider(
+          options: CarouselOptions(
+            height: 400,
+            aspectRatio: 1.0,
+            enlargeCenterPage: true,
+            enableInfiniteScroll: false,
+            viewportFraction: 1.0,
+            onPageChanged: (index, reason) {
+              setState(() {
+                _currentIndex = index;
+              });
+            },
+          ),
+          items: widget.images.map((FilesCommentModel image) {
+            return Builder(
+              builder: (BuildContext context) {
+                return FadeInImage(
+                  image: NetworkImage(image.urLObjeto),
+                  placeholder: const AssetImage("assets/load.gif"),
+                  imageErrorBuilder: (context, error, stackTrace) {
+                    return Image.asset(
+                      'assets/placeimg.jpg',
+                      fit: BoxFit.cover,
+                    );
+                  },
                   fit: BoxFit.cover,
                 );
               },
-              fit: BoxFit.cover,
             );
-          },
-        );
-      }).toList(),
+          }).toList(),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: widget.images.map((item) {
+            int index = widget.images.indexOf(item);
+            return Container(
+              width: 8.0,
+              height: 8.0,
+              margin:
+                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 4.0),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: _currentIndex == index ? AppTheme.primary : Colors.grey,
+              ),
+            );
+          }).toList(),
+        ),
+      ],
     );
   }
 }
