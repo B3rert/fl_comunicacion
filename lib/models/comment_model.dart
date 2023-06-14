@@ -54,5 +54,17 @@ class CommentPostModel {
   });
 
   final CommentModel comment;
-  final List<FilesCommentModel> files;
+  final FilesModel files;
+}
+
+class FilesModel {
+  FilesModel({
+    required this.pictures,
+    required this.documents,
+    required this.others,
+  });
+
+  final List<FilesCommentModel> pictures;
+  final List<FilesCommentModel> documents;
+  final List<FilesCommentModel> others;
 }

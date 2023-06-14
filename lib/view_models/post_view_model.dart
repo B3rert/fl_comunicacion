@@ -13,7 +13,16 @@ class PostViewModel extends ChangeNotifier {
     CommentModel comment,
     PostModel post,
   ) {
-    comments.add(CommentPostModel(comment: comment, files: []));
+    comments.add(
+      CommentPostModel(
+        comment: comment,
+        files: FilesModel(
+          pictures: [],
+          documents: [],
+          others: [],
+        ),
+      ),
+    );
     notifyListeners();
   }
 
@@ -53,7 +62,14 @@ class PostViewModel extends ChangeNotifier {
     comments.clear();
 
     for (var comment in res.message) {
-      CommentPostModel item = CommentPostModel(comment: comment, files: []);
+      CommentPostModel item = CommentPostModel(
+        comment: comment,
+        files: FilesModel(
+          pictures: [],
+          documents: [],
+          others: [],
+        ),
+      );
       comments.add(item);
     }
 
@@ -84,8 +100,34 @@ class PostViewModel extends ChangeNotifier {
 
       List<FilesCommentModel> files = resFile.message;
 
-      //agregar displays a la applicacion correspondientes
-      comment.files.addAll(files);
+      List<FilesCommentModel> imageUrls = [];
+
+      for (FilesCommentModel file in files) {
+        if (file.urLObjeto.endsWith('.jpg') ||
+            file.urLObjeto.endsWith('.png') ||
+            file.urLObjeto.endsWith('.jpeg')) {
+          imageUrls.add(file);
+        }
+      }
+
+      files.removeWhere((file) => imageUrls.contains(file));
+
+      comment.files.pictures.addAll(imageUrls);
+
+      List<FilesCommentModel> urlsWithoutExtension = [];
+      List<FilesCommentModel> urlsWithExtension = [];
+
+      for (FilesCommentModel file in files) {
+        if (file.urLObjeto.contains('.') && !file.urLObjeto.endsWith('/')) {
+          file.urLObjeto.contains('.'); // Check if URL contains a dot
+          urlsWithoutExtension.add(file);
+        } else {
+          urlsWithExtension.add(file);
+        }
+      }
+
+      comment.files.documents.addAll(urlsWithExtension);
+      comment.files.others.addAll(urlsWithoutExtension);
     }
 
     //stop prosses

@@ -159,23 +159,18 @@ class _CardComment extends StatelessWidget {
             const SizedBox(height: 10),
             //TODO:Validar fotos,
             // _MyCarousel(),
-            if (comment.files.isNotEmpty) const Text("Archivos"),
-            ListView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              itemCount: comment.files.length,
-              itemBuilder: (BuildContext context, int index) {
-                FilesCommentModel file = comment.files[index];
-                return ListTile(
-                    title: Text(file.objetoNombre),
-                    trailing: //archivo.descargado
-                        IconButton(
-                      icon: Icon(Icons.open_in_browser),
-                      onPressed: () {},
-                    ));
-              },
-            ),
+            if (comment.files.documents.isNotEmpty) const Text("Archivos"),
+            if (comment.files.documents.isNotEmpty)
+              ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: comment.files.documents.length,
+                itemBuilder: (BuildContext context, int index) {
+                  FilesCommentModel file = comment.files.documents[index];
+                  return Text(file.objetoNombre);
+                },
+              ),
           ],
         ),
       ),
@@ -271,64 +266,4 @@ String _formatDate(String date) {
   String datetime1 = DateFormat("dd/MM/yyyy hh:mm").format(parsedDate);
 
   return datetime1;
-}
-
-class _FileDownload extends StatefulWidget {
-  final String fileUrl;
-
-  _FileDownload({required this.fileUrl});
-
-  @override
-  _FileDownloadState createState() => _FileDownloadState();
-}
-
-class _FileDownloadState extends State<_FileDownload> {
-  String? rutaArchivo;
-
-  void descargarBotonPresionado() async {
-    final urlArchivo = widget
-        .fileUrl; // Utiliza la URL del archivo proporcionada en el constructor
-    final ruta = await descargarArchivo(urlArchivo);
-
-    setState(() {
-      rutaArchivo = ruta;
-    });
-  }
-
-  void abrirBotonPresionado() {
-    if (rutaArchivo != null) {
-      launch(rutaArchivo!);
-    }
-  }
-
-  Future<String> descargarArchivo(String url) async {
-    final response = await http.get(Uri.parse(url));
-    final bytes = response.bodyBytes;
-
-    final directory = await getExternalStorageDirectory();
-    final filePath =
-        '${directory!.path}/archivo.txt'; // Cambia "archivo.txt" al nombre del archivo que deseas descargar
-
-    await File(filePath).writeAsBytes(bytes);
-
-    return filePath;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        ElevatedButton(
-          onPressed: descargarBotonPresionado,
-          child: Text('Descargar archivo'),
-        ),
-        SizedBox(height: 16.0),
-        ElevatedButton(
-          onPressed: abrirBotonPresionado,
-          child: Text('Abrir archivo'),
-        ),
-      ],
-    );
-  }
 }
