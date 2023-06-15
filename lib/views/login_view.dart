@@ -13,14 +13,16 @@ class LoginView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          IconButton(
-            onPressed: () => _vm.navigateConfigApi(context),
-            icon: const Icon(
-              Icons.vpn_lock_outlined,
-            ),
-          )
-        ],
+        actions: _vm.isLoading
+            ? null
+            : [
+                IconButton(
+                  onPressed: () => _vm.navigateConfigApi(context),
+                  icon: const Icon(
+                    Icons.vpn_lock_outlined,
+                  ),
+                )
+              ],
       ),
       body: _vm.isLoading
           ? const LoadWidget()

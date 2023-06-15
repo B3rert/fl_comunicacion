@@ -1,6 +1,5 @@
 import 'package:fl_comunicacion/themes/app_theme.dart';
 import 'package:fl_comunicacion/view_models/welcome_view_model.dart';
-import 'package:fl_comunicacion/widgets/not_found_widget.dart';
 import 'package:fl_comunicacion/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -41,11 +40,11 @@ class _WelcomeViewState extends State<WelcomeView> {
                   raidus: 20,
                   child: Container(
                     color: AppTheme.primary,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
+                        children: [
                           Text(
                             "Siguiente",
                             style: TextStyle(
@@ -67,14 +66,16 @@ class _WelcomeViewState extends State<WelcomeView> {
               ),
             ),
       appBar: AppBar(
-        actions: [
-          IconButton(
-            onPressed: () => _vm.logout(context),
-            icon: const Icon(
-              Icons.logout,
-            ),
-          ),
-        ],
+        actions: _vm.isLoading
+            ? null
+            : [
+                IconButton(
+                  onPressed: () => _vm.logout(context),
+                  icon: const Icon(
+                    Icons.logout,
+                  ),
+                ),
+              ],
       ),
       body: _vm.isLoading
           ? const LoadWidget()
@@ -90,6 +91,22 @@ class _WelcomeViewState extends State<WelcomeView> {
                   : ListView(
                       children: [
                         const SizedBox(height: 75),
+                        // Center(
+                        //   child: FadeInImage(
+                        //     height: 450,
+                        //     image: const NetworkImage(
+                        //         "https://static.vecteezy.com/system/resources/previews/001/270/267/original/boy-studying-online-in-relax-mode-vector.jpg"),
+                        //     placeholder: const AssetImage("placeimg.jpg"),
+                        //     imageErrorBuilder: (context, error, stackTrace) {
+                        //       return Image.asset(
+                        //         'assets/banner.png',
+                        //         fit: BoxFit.cover,
+                        //       );
+                        //     },
+                        //     fit: BoxFit.cover,
+                        //   ),
+                        // ),
+                        // const SizedBox(height: 20),
                         Center(
                           child: Text(
                             _vm.mensajes[0].descripcion,
