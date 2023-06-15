@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:any_link_preview/any_link_preview.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:fl_comunicacion/models/models.dart';
@@ -9,8 +7,6 @@ import 'package:fl_comunicacion/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PostView extends StatelessWidget {
@@ -96,6 +92,7 @@ class _CardComment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _feedVM = Provider.of<FeedViewModel>(context);
+    final _vm = Provider.of<PostViewModel>(context);
 
     return Card(
       shape: RoundedRectangleBorder(
@@ -150,18 +147,14 @@ class _CardComment extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 20),
-
             _ContentText(
               elementos: _feedVM.splitText(
                 comment.comment.comentario,
               ),
             ),
             const SizedBox(height: 10),
-            //TODO:Validar fotos,
             if (comment.files.pictures.isNotEmpty)
               _MyCarousel(images: comment.files.pictures),
-
-            if (comment.files.documents.isNotEmpty) const Text("Documentos"),
             if (comment.files.documents.isNotEmpty)
               ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
@@ -170,11 +163,9 @@ class _CardComment extends StatelessWidget {
                 itemCount: comment.files.documents.length,
                 itemBuilder: (BuildContext context, int index) {
                   FilesCommentModel file = comment.files.documents[index];
-                  return Text(file.objetoNombre);
+                  return _CardFile(file: file);
                 },
               ),
-
-            if (comment.files.others.isNotEmpty) const Text("Otros"),
             if (comment.files.others.isNotEmpty)
               ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
@@ -189,6 +180,49 @@ class _CardComment extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _CardFile extends StatefulWidget {
+  const _CardFile({
+    super.key,
+    required this.file,
+  });
+
+  final FilesCommentModel file;
+
+  @override
+  State<_CardFile> createState() => _CardFileState();
+}
+
+class _CardFileState extends State<_CardFile> {
+  Future<void>? _launched;
+
+  Future<void> _launchInBrowser(Uri url) async {
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw Exception('Could not launch $url');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      contentPadding: EdgeInsets.zero,
+      title: Text(
+        widget.file.objetoNombre,
+        style: const TextStyle(fontSize: 13),
+      ),
+      trailing: const Icon(Icons.open_in_new),
+      leading: const Icon(Icons.insert_drive_file),
+      onTap: () => setState(() {
+        _launched = _launchInBrowser(
+          Uri.parse(widget.file.urLObjeto),
+        );
+      }),
     );
   }
 }
@@ -292,8 +326,10 @@ class _MyCarouselState extends State<_MyCarousel> {
             return Container(
               width: 8.0,
               height: 8.0,
-              margin:
-                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 4.0),
+              margin: const EdgeInsets.symmetric(
+                vertical: 10.0,
+                horizontal: 4.0,
+              ),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: _currentIndex == index ? AppTheme.primary : Colors.grey,
