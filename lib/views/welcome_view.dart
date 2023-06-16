@@ -90,58 +90,60 @@ class _WelcomeViewState extends State<WelcomeView> {
                     )
                   : ListView(
                       children: [
-                        const SizedBox(height: 75),
-                        // Center(
-                        //   child: FadeInImage(
-                        //     height: 450,
-                        //     image: const NetworkImage(
-                        //         "https://static.vecteezy.com/system/resources/previews/001/270/267/original/boy-studying-online-in-relax-mode-vector.jpg"),
-                        //     placeholder: const AssetImage("placeimg.jpg"),
-                        //     imageErrorBuilder: (context, error, stackTrace) {
-                        //       return Image.asset(
-                        //         'assets/banner.png',
-                        //         fit: BoxFit.cover,
-                        //       );
-                        //     },
-                        //     fit: BoxFit.cover,
-                        //   ),
-                        // ),
-                        // const SizedBox(height: 20),
-                        Center(
-                          child: Text(
-                            _vm.mensajes[0].descripcion,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 30,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        Container(
-                          margin: const EdgeInsets.all(10),
-                          width: double.infinity,
-                          child: Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            clipBehavior: Clip.antiAlias,
-                            color: AppTheme.backroundColorSecondary,
-                            child: Padding(
-                              padding: const EdgeInsets.all(20),
-                              child: Text(
-                                _vm.mensajes[0].observacion1,
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(fontSize: 20),
+                        Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Column(
+                            children: [
+                              FadeInImage(
+                                height: 450,
+                                image: const NetworkImage(
+                                    "https://static.vecteezy.com/system/resources/previews/001/270/267/original/boy-studying-online-in-relax-mode-vector.jpg"),
+                                placeholder:
+                                    const AssetImage("assets/load.gif"),
+                                imageErrorBuilder:
+                                    (context, error, stackTrace) {
+                                  return Image.asset(
+                                    "assets/placeimg.jpg",
+                                    fit: BoxFit.cover,
+                                  );
+                                },
+                                fit: BoxFit.cover,
                               ),
-                            ),
+                              const SizedBox(height: 20),
+                              Text(
+                                _vm.mensajes[0].descripcion,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 30,
+                                ),
+                              ),
+                              const SizedBox(height: 20),
+                              Container(
+                                margin: const EdgeInsets.all(10),
+                                width: double.infinity,
+                                child: Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  clipBehavior: Clip.antiAlias,
+                                  color: AppTheme.backroundColorSecondary,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(20),
+                                    child: Text(
+                                      _vm.mensajes[0].observacion1,
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(fontSize: 20),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                _formatDate(_vm.mensajes[0].fechaHora),
+                                style: const TextStyle(color: Colors.grey),
+                              ),
+                            ],
                           ),
-                        ),
-                        Center(
-                          child: Text(
-                            _formatDate(_vm.mensajes[0].fechaHora),
-                            style: const TextStyle(color: Colors.grey),
-                          ),
-                        ),
+                        )
                       ],
                     ),
             ),

@@ -144,6 +144,13 @@ class _FeedViewState extends State<FeedView> {
                                       image: NetworkImage(
                                         _vm.users[0].foto,
                                       ),
+                                      imageErrorBuilder:
+                                          (context, error, stackTrace) {
+                                        return Image.asset(
+                                          "assets/placeimg.jpg",
+                                          fit: BoxFit.cover,
+                                        );
+                                      },
                                     ),
                         ),
                       ),
@@ -275,6 +282,12 @@ class _HeaderDrawer extends StatelessWidget {
                     image: NetworkImage(
                       _vm.users[0].foto,
                     ),
+                    imageErrorBuilder: (context, error, stackTrace) {
+                      return Image.asset(
+                        "assets/placeimg.jpg",
+                        fit: BoxFit.cover,
+                      );
+                    },
                   ),
       ),
     );
