@@ -14,6 +14,7 @@ class PostModel {
   int estado;
   String fechaHora;
   int cantidadComentarios;
+  dynamic imagen;
 
   PostModel({
     required this.tarea,
@@ -25,6 +26,7 @@ class PostModel {
     required this.estado,
     required this.fechaHora,
     required this.cantidadComentarios,
+    required this.imagen,
   });
 
   factory PostModel.fromJson(String str) => PostModel.fromMap(json.decode(str));
@@ -41,6 +43,7 @@ class PostModel {
         estado: json["estado"],
         fechaHora: json["fecha_Hora"],
         cantidadComentarios: json["cantidad_Comentarios"],
+        imagen: json["imagen"].toString() == "{}" ? null : json["imagen"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -53,5 +56,6 @@ class PostModel {
         "estado": estado,
         "fecha_Hora": fechaHora,
         "cantidad_Comentarios": cantidadComentarios,
+        "imagen": imagen.toString() == "{}" ? null : imagen,
       };
 }

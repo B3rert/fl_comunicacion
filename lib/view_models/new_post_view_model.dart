@@ -86,6 +86,7 @@ class NewPostViewModel extends ChangeNotifier {
       estado: posts[0].estado,
       fechaHora: posts[0].fechaHora,
       cantidadComentarios: 0,
+      imagen: _feedVM.users[0].foto,
     );
 
     _feedVM.postInFeed(post);

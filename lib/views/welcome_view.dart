@@ -94,22 +94,23 @@ class _WelcomeViewState extends State<WelcomeView> {
                           padding: const EdgeInsets.all(20),
                           child: Column(
                             children: [
-                              FadeInImage(
-                                height: 450,
-                                image: const NetworkImage(
-                                    "https://static.vecteezy.com/system/resources/previews/001/270/267/original/boy-studying-online-in-relax-mode-vector.jpg"),
-                                placeholder:
-                                    const AssetImage("assets/load.gif"),
-                                imageErrorBuilder:
-                                    (context, error, stackTrace) {
-                                  return Image.asset(
-                                    "assets/placeimg.jpg",
-                                    fit: BoxFit.cover,
-                                  );
-                                },
-                                fit: BoxFit.cover,
-                              ),
-                              const SizedBox(height: 20),
+                              if (_vm.mensajes[0].imagen != null)
+                                FadeInImage(
+                                  height: 450,
+                                  image: NetworkImage(_vm.mensajes[0].imagen),
+                                  placeholder:
+                                      const AssetImage("assets/load.gif"),
+                                  imageErrorBuilder:
+                                      (context, error, stackTrace) {
+                                    return Image.asset(
+                                      "assets/placeimg.jpg",
+                                      fit: BoxFit.cover,
+                                    );
+                                  },
+                                  fit: BoxFit.cover,
+                                ),
+                              if (_vm.mensajes[0].imagen != null)
+                                const SizedBox(height: 20),
                               Text(
                                 _vm.mensajes[0].descripcion,
                                 style: const TextStyle(

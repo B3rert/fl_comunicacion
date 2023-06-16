@@ -16,6 +16,7 @@ class WelcomeModel {
   dynamic cuentaCta;
   int estado;
   String fechaHora;
+  dynamic imagen;
 
   WelcomeModel({
     required this.tarea,
@@ -29,6 +30,7 @@ class WelcomeModel {
     required this.cuentaCta,
     required this.estado,
     required this.fechaHora,
+    required this.imagen,
   });
 
   factory WelcomeModel.fromJson(String str) =>
@@ -51,6 +53,7 @@ class WelcomeModel {
             json["cuenta_Cta"].toString() == "{}" ? null : json["cuenta_Cta"],
         estado: json["estado"],
         fechaHora: json["fecha_Hora"],
+        imagen: json["imagen"].toString() == "{}" ? null : json["imagen"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -66,5 +69,6 @@ class WelcomeModel {
         "cuenta_Cta": cuentaCta.toString() == '{}' ? null : cuentaCta,
         "estado": estado,
         "fecha_Hora": fechaHora,
+        "imagen": imagen.toString() == "{}" ? null : imagen,
       };
 }

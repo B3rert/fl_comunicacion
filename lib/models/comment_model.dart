@@ -13,6 +13,7 @@ class CommentModel {
   String userName;
   String comentario;
   int estado;
+  dynamic imagen;
 
   CommentModel({
     required this.tareaComentario,
@@ -21,6 +22,7 @@ class CommentModel {
     required this.userName,
     required this.comentario,
     required this.estado,
+    required this.imagen,
   });
 
   factory CommentModel.fromJson(String str) =>
@@ -35,6 +37,7 @@ class CommentModel {
         userName: json["userName"],
         comentario: json["comentario"],
         estado: json["estado"],
+        imagen: json["imagen"].toString() == "{}" ? null : json["imagen"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -44,6 +47,7 @@ class CommentModel {
         "userName": userName,
         "comentario": comentario,
         "estado": estado,
+        "imagen": imagen.toString() == "{}" ? null : imagen,
       };
 }
 
