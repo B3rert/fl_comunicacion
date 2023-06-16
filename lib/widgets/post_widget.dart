@@ -88,7 +88,7 @@ class PostWidget extends StatelessWidget {
             _ContentText(elementos: _vm.splitText(post.observacion1)),
             const SizedBox(height: 10),
             //TODO:Validar fotos,
-            if (index > 1) _MyCarousel(),
+            // if (index > 1) _MyCarousel(),
             const SizedBox(height: 20),
 
             Text(
