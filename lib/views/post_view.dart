@@ -107,14 +107,39 @@ class _CardComment extends StatelessWidget {
           children: [
             Row(
               children: [
-                Container(
+                SizedBox(
                   width: 50,
                   height: 50,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: AssetImage("assets/user.png"),
+                  child: ClipOval(
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      color: AppTheme.primary,
+                      child: Center(
+                        child: comment.comment.imagen == null
+                            ? Text(
+                                comment.comment.userName[0].toUpperCase(),
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : FadeInImage.assetNetwork(
+                                placeholder: 'assets/user.png',
+                                image: comment.comment.imagen,
+                                fit: BoxFit.cover,
+                                width: 100,
+                                height: 100,
+                                imageErrorBuilder:
+                                    (context, error, stackTrace) {
+                                  return Image.asset(
+                                    'assets/user.png',
+                                    fit: BoxFit.cover,
+                                  );
+                                },
+                              ),
+                      ),
                     ),
                   ),
                 ),

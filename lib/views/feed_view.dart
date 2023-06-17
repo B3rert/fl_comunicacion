@@ -1,3 +1,4 @@
+import 'package:fl_comunicacion/models/models.dart';
 import 'package:fl_comunicacion/themes/app_theme.dart';
 import 'package:fl_comunicacion/view_models/view_models.dart';
 import 'package:fl_comunicacion/widgets/widgets.dart';
@@ -51,49 +52,27 @@ class _FeedViewState extends State<FeedView> {
                       children: [
                         GestureDetector(
                           onTap: () => scaffoldKey.currentState?.openDrawer(),
-                          child: CardWidget(
-                            color: AppTheme.backroundColor,
-                            width: double.infinity,
-                            height: 190,
-                            raidus: 22,
-                            child: _HeaderDrawer(
-                              backgroundIcon: AppTheme.primary,
-                              textColor: Colors.black,
-                              color: AppTheme.backroundColor,
-                            ),
-                          ),
+                          child: const _CardUser(),
                         ),
                         if (_vm.posts.isEmpty) const SizedBox(height: 75),
                         if (_vm.posts.isEmpty) const NotFoundWidget(),
-                        // if (_vm.posts.isNotEmpty)
-                        //   ListView.builder(
-                        //     physics: const NeverScrollableScrollPhysics(),
-                        //     scrollDirection: Axis.vertical,
-                        //     shrinkWrap: true,
-                        //     itemCount: _vm.posts.length,
-                        //     itemBuilder: (BuildContext context, int index) {
-                        //       return GestureDetector(
-                        //         onTap: () {
-                        //           final _postVM = Provider.of<PostViewModel>(
-                        //               context,
-                        //               listen: false);
-
-                        //           _postVM.loadData(
-                        //               context, _vm.posts[index].tarea);
-
-                        //           Navigator.pushNamed(
-                        //             context,
-                        //             "post",
-                        //             arguments: _vm.posts[index],
-                        //           );
-                        //         },
-                        //         child: PostWidget(
-                        //           post: _vm.posts[index],
-                        //           index: index,
-                        //         ),
-                        //       );
-                        //     },
-                        //   ),
+                        if (_vm.posts.isNotEmpty)
+                          ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            itemCount: _vm.posts.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              PostModel post = _vm.posts[index];
+                              return GestureDetector(
+                                onTap: () => _vm.navigatePost(context, post),
+                                child: PostWidget(
+                                  post: _vm.posts[index],
+                                  index: index,
+                                ),
+                              );
+                            },
+                          ),
                       ],
                     ),
                   ),
@@ -135,6 +114,27 @@ class _FeedViewState extends State<FeedView> {
                 )
               ],
             ),
+    );
+  }
+}
+
+class _CardUser extends StatelessWidget {
+  const _CardUser({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return CardWidget(
+      color: AppTheme.backroundColor,
+      width: double.infinity,
+      height: 190,
+      raidus: 22,
+      child: _HeaderDrawer(
+        backgroundIcon: AppTheme.primary,
+        textColor: Colors.black,
+        color: AppTheme.backroundColor,
+      ),
     );
   }
 }

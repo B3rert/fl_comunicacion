@@ -156,6 +156,21 @@ class FeedViewModel extends ChangeNotifier {
     return elementos;
   }
 
+  navigatePost(BuildContext context, PostModel post) {
+    final _postVM = Provider.of<PostViewModel>(
+      context,
+      listen: false,
+    );
+
+    _postVM.loadData(context, post.tarea);
+
+    Navigator.pushNamed(
+      context,
+      "post",
+      arguments: post,
+    );
+  }
+
   logout(BuildContext context) {
     final _loginVM = Provider.of<LoginViewModel>(context, listen: false);
 

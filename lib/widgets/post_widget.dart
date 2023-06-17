@@ -1,9 +1,11 @@
 import 'package:any_link_preview/any_link_preview.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:fl_comunicacion/models/models.dart';
+import 'package:fl_comunicacion/services/notificacions_service.dart';
 import 'package:fl_comunicacion/themes/app_theme.dart';
 import 'package:fl_comunicacion/view_models/view_models.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -34,14 +36,39 @@ class PostWidget extends StatelessWidget {
           children: [
             Row(
               children: [
-                Container(
+                SizedBox(
                   width: 50,
                   height: 50,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: AssetImage("assets/user.png"),
+                  child: ClipOval(
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      color: AppTheme.primary,
+                      child: Center(
+                        child: post.imagen == null
+                            ? Text(
+                                post.userName[0].toUpperCase(),
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : FadeInImage.assetNetwork(
+                                placeholder: 'assets/user.png',
+                                image: post.imagen,
+                                fit: BoxFit.cover,
+                                width: 100,
+                                height: 100,
+                                imageErrorBuilder:
+                                    (context, error, stackTrace) {
+                                  return Image.asset(
+                                    'assets/user.png',
+                                    fit: BoxFit.cover,
+                                  );
+                                },
+                              ),
+                      ),
                     ),
                   ),
                 ),
@@ -125,9 +152,26 @@ class _ContentText extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              texto.contenido,
-              style: const TextStyle(fontSize: 13),
+            GestureDetector(
+              onLongPress: texto.esEnlace
+                  ? () async {
+                      await Clipboard.setData(
+                          ClipboardData(text: texto.contenido));
+
+                      NotificationsService.showSnackbar(
+                          "Enlace copiado al portapapeles");
+                    }
+                  : null,
+              child: Text(
+                texto.contenido,
+                style: texto.esEnlace
+                    ? const TextStyle(
+                        fontSize: 13,
+                        color: Colors.blueAccent,
+                        decoration: TextDecoration.underline,
+                      )
+                    : const TextStyle(fontSize: 13),
+              ),
             ),
             const SizedBox(height: 10),
             if (texto.esEnlace)
@@ -140,8 +184,10 @@ class _ContentText extends StatelessWidget {
                   color: AppTheme.backroundColor,
                   child: const Text('Oops!'),
                 ),
+                errorBody:
+                    "https://developers.google.com/static/maps/documentation/streetview/images/error-image-generic.png",
                 errorImage:
-                    "https://i.ytimg.com/vi/z8wrRRR7_qU/maxresdefault.jpg",
+                    "asstes/placeimg.jpghttps://developers.google.com/static/maps/documentation/streetview/images/error-image-generic.png",
               ),
             if (texto.esEnlace) const SizedBox(height: 10),
           ],
