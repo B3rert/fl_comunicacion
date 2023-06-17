@@ -65,35 +65,35 @@ class _FeedViewState extends State<FeedView> {
                         ),
                         if (_vm.posts.isEmpty) const SizedBox(height: 75),
                         if (_vm.posts.isEmpty) const NotFoundWidget(),
-                        if (_vm.posts.isNotEmpty)
-                          ListView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            itemCount: _vm.posts.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return GestureDetector(
-                                onTap: () {
-                                  final _postVM = Provider.of<PostViewModel>(
-                                      context,
-                                      listen: false);
+                        // if (_vm.posts.isNotEmpty)
+                        //   ListView.builder(
+                        //     physics: const NeverScrollableScrollPhysics(),
+                        //     scrollDirection: Axis.vertical,
+                        //     shrinkWrap: true,
+                        //     itemCount: _vm.posts.length,
+                        //     itemBuilder: (BuildContext context, int index) {
+                        //       return GestureDetector(
+                        //         onTap: () {
+                        //           final _postVM = Provider.of<PostViewModel>(
+                        //               context,
+                        //               listen: false);
 
-                                  _postVM.loadData(
-                                      context, _vm.posts[index].tarea);
+                        //           _postVM.loadData(
+                        //               context, _vm.posts[index].tarea);
 
-                                  Navigator.pushNamed(
-                                    context,
-                                    "post",
-                                    arguments: _vm.posts[index],
-                                  );
-                                },
-                                child: PostWidget(
-                                  post: _vm.posts[index],
-                                  index: index,
-                                ),
-                              );
-                            },
-                          ),
+                        //           Navigator.pushNamed(
+                        //             context,
+                        //             "post",
+                        //             arguments: _vm.posts[index],
+                        //           );
+                        //         },
+                        //         child: PostWidget(
+                        //           post: _vm.posts[index],
+                        //           index: index,
+                        //         ),
+                        //       );
+                        //     },
+                        //   ),
                       ],
                     ),
                   ),
@@ -126,33 +126,8 @@ class _FeedViewState extends State<FeedView> {
                       height: 250.0,
                       child: IconButton(
                         iconSize: 50,
-                        onPressed: () {
-                          scaffoldKey.currentState?.openDrawer();
-                        },
-                        icon: CircleAvatar(
-                          backgroundColor: AppTheme.primary,
-                          radius: 32,
-                          child: _vm.users.isEmpty
-                              ? const Text("U")
-                              : _vm.users[0].foto == null ||
-                                      _vm.users[0].foto == ""
-                                  ? Text(_vm.users[0].userName[0].toUpperCase())
-                                  : FadeInImage(
-                                      placeholder: const AssetImage(
-                                        "assets/user.png",
-                                      ),
-                                      image: NetworkImage(
-                                        _vm.users[0].foto,
-                                      ),
-                                      imageErrorBuilder:
-                                          (context, error, stackTrace) {
-                                        return Image.asset(
-                                          "assets/placeimg.jpg",
-                                          fit: BoxFit.cover,
-                                        );
-                                      },
-                                    ),
-                        ),
+                        onPressed: () => scaffoldKey.currentState?.openDrawer(),
+                        icon: _UserCircle(),
                       ),
                       alignment: const Alignment(-0.9, -0.4),
                     )
@@ -160,6 +135,52 @@ class _FeedViewState extends State<FeedView> {
                 )
               ],
             ),
+    );
+  }
+}
+
+class _UserCircle extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final _vm = Provider.of<FeedViewModel>(context);
+
+    return ClipOval(
+      child: Container(
+        width: 100,
+        height: 100,
+        color: AppTheme.primary,
+        child: Center(
+          child: _vm.users.isEmpty
+              ? const Text(
+                  "U",
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white),
+                )
+              : _vm.users[0].foto == null
+                  ? Text(
+                      _vm.users[0].userName[0].toUpperCase(),
+                      style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white),
+                    )
+                  : FadeInImage.assetNetwork(
+                      placeholder: 'assets/user.png',
+                      image: _vm.users[0].foto,
+                      fit: BoxFit.cover,
+                      width: 100,
+                      height: 100,
+                      imageErrorBuilder: (context, error, stackTrace) {
+                        return Image.asset(
+                          'assets/user.png',
+                          fit: BoxFit.cover,
+                        );
+                      },
+                    ),
+        ),
+      ),
     );
   }
 }
@@ -262,34 +283,7 @@ class _HeaderDrawer extends StatelessWidget {
             : _vm.users[0].eMail,
         style: TextStyle(color: textColor),
       ),
-      currentAccountPicture: CircleAvatar(
-        backgroundColor: backgroundIcon,
-        radius: 32,
-        child: _vm.users.isEmpty
-            ? const Text(
-                "U",
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                ),
-              )
-            : _vm.users[0].foto == null || _vm.users[0].foto == ""
-                ? Text(_vm.users[0].userName[0].toUpperCase())
-                : FadeInImage(
-                    placeholder: const AssetImage(
-                      "assets/user.png",
-                    ),
-                    image: NetworkImage(
-                      _vm.users[0].foto,
-                    ),
-                    imageErrorBuilder: (context, error, stackTrace) {
-                      return Image.asset(
-                        "assets/placeimg.jpg",
-                        fit: BoxFit.cover,
-                      );
-                    },
-                  ),
-      ),
+      currentAccountPicture: _UserCircle(),
     );
   }
 }
