@@ -183,7 +183,11 @@ class FeedViewModel extends ChangeNotifier {
           //Cerrar sesión, limpiar datos
           Navigator.of(context).pop();
           _loginVM.logout();
-          Navigator.pushReplacementNamed(context, 'login');
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            'login', // Ruta a la que se redirigirá después de cerrar sesión
+            (Route<dynamic> route) =>
+                false, // Condición para eliminar todas las rutas anteriores
+          );
         },
         onCancel: () => Navigator.pop(context),
       ),
