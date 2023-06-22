@@ -7,9 +7,7 @@ class Preferences {
   static late SharedPreferences _prefs;
   static String _token = "";
   static String _userName = "";
-  static String _baseUrl = "";
-  static String _path = "";
-  static String _prefix = "";
+  static String _urlApi = "";
 
   static Future init() async {
     _prefs = await SharedPreferences.getInstance();
@@ -33,39 +31,22 @@ class Preferences {
     _prefs.setString("userName", userName);
   }
 
-  static String get baseUrl {
-    return _prefs.getString("baseUrl") ?? _baseUrl;
-  }
-
-  static set baseUrl(String baseUrl) {
-    _baseUrl = baseUrl;
-    _prefs.setString("baseUrl", baseUrl);
-  }
-
-  static String get path {
-    return _prefs.getString("path") ?? _path;
-  }
-
-  static set path(String path) {
-    _path = path;
-    _prefs.setString("path", path);
-  }
-
-  static String get prefix {
-    return _prefs.getString("prefix") ?? _prefix;
-  }
-
-  static set prefix(String prefix) {
-    _prefix = prefix;
-    _prefs.setString("prefix", prefix);
-  }
-
   static void clearToken() {
     _prefs.remove("token");
     _prefs.remove("userName");
   }
 
+  static String get urlApi {
+    return _prefs.getString("urlApi") ?? _urlApi;
+  }
+
+  static set urlApi(String urlApi) {
+    _urlApi = urlApi;
+    _prefs.setString("urlApi", urlApi);
+  }
+
   static void clearUrl() {
+    _prefs.remove("urlApi");
     _prefs.remove("prefix");
     _prefs.remove("path");
     _prefs.remove("baseUrl");

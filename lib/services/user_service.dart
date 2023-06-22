@@ -6,24 +6,14 @@ import 'package:http/http.dart' as http;
 
 class UserService {
   // Url del servidor
-  final String _baseUrl = Preferences.baseUrl;
-  //path
-  final String _path = Preferences.path;
+  final String _baseUrl = Preferences.urlApi;
 
   Future<ApiResModel> getInfoUser(
     String user,
     String token,
   ) async {
     try {
-      Uri url;
-
-      if (Preferences.prefix == 'https') {
-        url = Uri.https(
-            _baseUrl, "${_path.isEmpty ? '' : _path + '/'}api/User/info/$user");
-      } else {
-        url = Uri.http(
-            _baseUrl, "${_path.isEmpty ? '' : _path + '/'}api/User/info/$user");
-      }
+      Uri url = Uri.parse("${_baseUrl}User/info/$user");
 
       final response = await http.get(
         url,
