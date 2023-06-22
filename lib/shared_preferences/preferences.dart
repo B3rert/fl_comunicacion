@@ -47,8 +47,5 @@ class Preferences {
 
   static void clearUrl() {
     _prefs.remove("urlApi");
-    _prefs.remove("prefix");
-    _prefs.remove("path");
-    _prefs.remove("baseUrl");
   }
 }
