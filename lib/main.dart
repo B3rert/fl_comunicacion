@@ -2,17 +2,19 @@ import 'package:fl_comunicacion/routes/app_routes.dart';
 import 'package:fl_comunicacion/services/services.dart';
 import 'package:fl_comunicacion/shared_preferences/preferences.dart';
 import 'package:fl_comunicacion/themes/app_theme.dart';
-import 'package:fl_comunicacion/view_models/new_post_view_model.dart';
 import 'package:fl_comunicacion/view_models/view_models.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
+  //inicializar shared preferences (preferencias de usuario)
   WidgetsFlutterBinding.ensureInitialized();
   await Preferences.init();
+  //inicializar aplicacion
   runApp(const AppState());
 }
 
+//Estado de la aplicacion con provider
 class AppState extends StatelessWidget {
   const AppState({Key? key}) : super(key: key);
 
@@ -20,6 +22,7 @@ class AppState extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        //providers (ViewModels)
         ChangeNotifierProvider(create: (_) => LoginViewModel()),
         ChangeNotifierProvider(create: (_) => WelcomeViewModel()),
         ChangeNotifierProvider(create: (_) => ApiViewModel()),
@@ -28,6 +31,7 @@ class AppState extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => NewPostViewModel()),
         ChangeNotifierProvider(create: (_) => NewCommentViewModel()),
       ],
+      //aplicacion
       child: const MyApp(),
     );
   }
@@ -40,11 +44,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final _loginVM = Provider.of<LoginViewModel>(context, listen: false);
 
+    //verificar si hay sesiones guardadas
     if (Preferences.token.isNotEmpty) {
       _loginVM.token = Preferences.token;
       _loginVM.nameUser = Preferences.userName;
     }
 
+    //limpiar preferencias
     // Preferences.clearUrl();
     // Preferences.clearToken();
 
