@@ -6,23 +6,13 @@ import 'package:http/http.dart' as http;
 
 class LoginService {
   // Url del servidor
-  final String _baseUrl = Preferences.baseUrl;
-  //path
-  final String _path = Preferences.path;
+  final String _baseUrl = Preferences.urlApi;
 
   // Consume el Api
   Future<ApiResModel> postLogin(LoginModel loginModel) async {
     //  Consumo del Api
     try {
-      Uri url;
-      // Arma Url del Api
-      if (Preferences.prefix == 'https') {
-        url =
-            Uri.https(_baseUrl, "${_path.isEmpty ? '' : _path + '/'}api/Login");
-      } else {
-        url =
-            Uri.http(_baseUrl, "${_path.isEmpty ? '' : _path + '/'}api/Login");
-      }
+      Uri url = Uri.parse("${_baseUrl}Login");
 
       // Configurar Api y consumirla
       final response = await http.post(

@@ -27,7 +27,7 @@ class ApiView extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          if (Preferences.baseUrl.isEmpty)
+                          if (Preferences.urlApi.isEmpty)
                             const Text(
                               "Url Apis",
                               style: TextStyle(
@@ -35,18 +35,18 @@ class ApiView extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                          if (Preferences.baseUrl.isEmpty)
+                          if (Preferences.urlApi.isEmpty)
                             const SizedBox(height: 10),
-                          if (Preferences.baseUrl.isEmpty)
+                          if (Preferences.urlApi.isEmpty)
                             const Text(
                               "Para poder utilizar nuestros servicios, por favor, introduce una URL válida. ",
                               style: TextStyle(
                                 fontSize: 20,
                               ),
                             ),
-                          if (Preferences.baseUrl.isNotEmpty)
+                          if (Preferences.urlApi.isNotEmpty)
                             const SizedBox(height: 20),
-                          if (Preferences.baseUrl.isNotEmpty)
+                          if (Preferences.urlApi.isNotEmpty)
                             const Text(
                               "Url Actual",
                               style: TextStyle(
@@ -54,11 +54,11 @@ class ApiView extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                          if (Preferences.baseUrl.isNotEmpty)
+                          if (Preferences.urlApi.isNotEmpty)
                             const SizedBox(height: 10),
-                          if (Preferences.baseUrl.isNotEmpty)
+                          if (Preferences.urlApi.isNotEmpty)
                             Text(
-                              "${Preferences.prefix}//${Preferences.baseUrl}/${Preferences.path}${Preferences.path.isEmpty ? '' : Preferences.path + '/'}api/",
+                              Preferences.urlApi,
                               style: const TextStyle(
                                 fontSize: 20,
                               ),
@@ -101,7 +101,7 @@ class ApiView extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 20),
-                            if (Preferences.baseUrl.isNotEmpty)
+                            if (Preferences.urlApi.isNotEmpty)
                               Row(
                                 children: [
                                   Expanded(
@@ -132,7 +132,7 @@ class ApiView extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                            if (Preferences.baseUrl.isEmpty)
+                            if (Preferences.urlApi.isEmpty)
                               ElevatedButton(
                                 onPressed: () => _vm.connectService(context),
                                 child: const SizedBox(

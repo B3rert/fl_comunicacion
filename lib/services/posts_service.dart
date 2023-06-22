@@ -5,23 +5,14 @@ import 'package:http/http.dart' as http;
 
 class PostService {
   // Url del servidor
-  final String _baseUrl = Preferences.baseUrl;
-  //path
-  final String _path = Preferences.path;
+  final String _baseUrl = Preferences.urlApi;
 
   Future<ApiResModel> getPosts(
     String user,
     String token,
   ) async {
     try {
-      Uri url;
-      if (Preferences.prefix == 'https') {
-        url = Uri.https(_baseUrl,
-            "${_path.isEmpty ? '' : _path + '/'}api/Publicacion/$user");
-      } else {
-        url = Uri.http(_baseUrl,
-            "${_path.isEmpty ? '' : _path + '/'}api/Publicacion/$user");
-      }
+      Uri url = Uri.parse("${_baseUrl}Publicacion/$user");
 
       final response = await http.get(
         url,
@@ -59,14 +50,7 @@ class PostService {
     int tarea,
   ) async {
     try {
-      Uri url;
-      if (Preferences.prefix == 'https') {
-        url = Uri.https(_baseUrl,
-            "${_path.isEmpty ? '' : _path + '/'}api/Publicacion/comentarios/$user/$tarea");
-      } else {
-        url = Uri.http(_baseUrl,
-            "${_path.isEmpty ? '' : _path + '/'}api/Publicacion/comentarios/$user/$tarea");
-      }
+      Uri url = Uri.parse("${_baseUrl}Publicacion/comentarios/$user/$tarea");
 
       final response = await http.get(
         url,
@@ -105,14 +89,8 @@ class PostService {
     int comentario,
   ) async {
     try {
-      Uri url;
-      if (Preferences.prefix == 'https') {
-        url = Uri.https(_baseUrl,
-            "${_path.isEmpty ? '' : _path + '/'}api/Publicacion/comentarios/archivos/$user/$tarea/$comentario");
-      } else {
-        url = Uri.http(_baseUrl,
-            "${_path.isEmpty ? '' : _path + '/'}api/Publicacion/comentarios/archivos/$user/$tarea/$comentario");
-      }
+      Uri url = Uri.parse(
+          "${_baseUrl}Publicacion/comentarios/archivos/$user/$tarea/$comentario");
 
       final response = await http.get(
         url,
@@ -151,15 +129,7 @@ class PostService {
   ) async {
     //  Consumo del Api
     try {
-      Uri url;
-      // Arma Url del Api
-      if (Preferences.prefix == 'https') {
-        url = Uri.https(
-            _baseUrl, "${_path.isEmpty ? '' : _path + '/'}api/Publicacion");
-      } else {
-        url = Uri.http(
-            _baseUrl, "${_path.isEmpty ? '' : _path + '/'}api/Publicacion");
-      }
+      Uri url = Uri.parse("${_baseUrl}Publicacion");
 
       // Configurar Api y consumirla
       final response = await http.post(
@@ -201,15 +171,7 @@ class PostService {
   ) async {
     //  Consumo del Api
     try {
-      Uri url;
-      // Arma Url del Api
-      if (Preferences.prefix == 'https') {
-        url = Uri.https(_baseUrl,
-            "${_path.isEmpty ? '' : _path + '/'}api/Publicacion/comentario");
-      } else {
-        url = Uri.http(_baseUrl,
-            "${_path.isEmpty ? '' : _path + '/'}api/Publicacion/comentario");
-      }
+      Uri url = Uri.parse("${_baseUrl}Publicacion/comentario");
 
       // Configurar Api y consumirla
       final response = await http.post(

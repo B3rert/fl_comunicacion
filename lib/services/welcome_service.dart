@@ -6,23 +6,14 @@ import 'package:http/http.dart' as http;
 
 class WelcomeService {
   // Url del servidor
-  final String _baseUrl = Preferences.baseUrl;
-  //path
-  final String _path = Preferences.path;
+  final String _baseUrl = Preferences.urlApi;
 
   Future<ApiResModel> getWelcome(
     String user,
     String token,
   ) async {
     try {
-      Uri url;
-      if (Preferences.prefix == 'https') {
-        url = Uri.https(_baseUrl,
-            "${_path.isEmpty ? '' : _path + '/'}api/Bienvenida/$user");
-      } else {
-        url = Uri.http(_baseUrl,
-            "${_path.isEmpty ? '' : _path + '/'}api/Bienvenida/$user");
-      }
+      Uri url = Uri.parse("${_baseUrl}Bienvenida/$user");
 
       final response = await http.get(
         url,

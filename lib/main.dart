@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       // initialRoute: "home",
-      initialRoute: Preferences.baseUrl.isEmpty
+      initialRoute: Preferences.urlApi.isEmpty
           ? "api"
           : Preferences.token.isNotEmpty
               ? AppRoutes.secondRoute
