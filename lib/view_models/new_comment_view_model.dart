@@ -6,9 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class NewCommentViewModel extends ChangeNotifier {
+  //manejar inicio y fin del proceso
   bool isLoading = false;
 
-  //Map form
+  //Formulario crear publicacion o comentario
   final Map<String, String> formValues = {
     'title': '',
     'description': '',
@@ -22,19 +23,24 @@ class NewCommentViewModel extends ChangeNotifier {
     return formKey.currentState?.validate() ?? false;
   }
 
+  //crear un n nuevo comentario
   createComment(
     BuildContext context,
     PostModel post,
   ) async {
+    //validar formualrio
     if (!isValidForm()) return;
 
+    //nueva instancia del servicio
     PostService postService = PostService();
 
+    //iniciar proceso
     isLoading = true;
     notifyListeners();
 
     final _loginVM = Provider.of<LoginViewModel>(context, listen: false);
 
+    //Objeto nuevo comentario
     PostCommentModel comment = PostCommentModel(
       tarea: post.tarea,
       user: _loginVM.nameUser,
@@ -42,6 +48,7 @@ class NewCommentViewModel extends ChangeNotifier {
       descripcion: formValues["description"]!,
     );
 
+    //usao del servicio, crear comentario
     ApiResModel res = await postService.posComment(_loginVM.token, comment);
 
     //stop prosses
@@ -62,8 +69,10 @@ class NewCommentViewModel extends ChangeNotifier {
       return;
     }
 
+    //el servicio devuleve el comentario creado, asignar a variable
     List<CommentModel> comments = res.message;
 
+    //si no hay commentario en la respuesta no se creó el comentario
     if (comments.isEmpty) {
       showDialog(
         context: context,
@@ -77,13 +86,18 @@ class NewCommentViewModel extends ChangeNotifier {
       return;
     }
 
+    //Mostrar mensaje si se creo el comentario
     NotificationsService.showSnackbar("Comentario creado correctamente");
+    //actualizar view models
     final _feedVM = Provider.of<FeedViewModel>(context, listen: false);
     final _postVM = Provider.of<PostViewModel>(context, listen: false);
 
+    //agreagar commmenatrio a la pantalla cometarios
     _feedVM.addComment(post);
+    //sumar comentario a la publicacion original
     _postVM.addComment(comments[0], post);
 
+    //limpiar campo
     formValues["title"] = "";
   }
 }

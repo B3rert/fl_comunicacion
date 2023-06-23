@@ -6,22 +6,32 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class FeedViewModel extends ChangeNotifier {
+  //controlar proceso
   bool isLoading = false;
+  //informacion del usario
   final List<InfoUserModel> users = [];
+  //Banner
   final List<BannerModel> banners = [];
+  //publicaciones
   final List<PostModel> posts = [];
 
+  //agreagar comentario a una publicacion
   addComment(PostModel post) {
+    //buscar cual es la publicacon (indice en la lista)
     int indice = posts.indexWhere((item) => item.tarea == post.tarea);
+    //Sumar 1 a la cantidad de comentarios de la publicacion
     posts[indice].cantidadComentarios++;
     notifyListeners();
   }
 
+  //Agreagar una nueva publicacion
   postInFeed(PostModel post) {
+    //en el indice 0 agregar la nueva publicacion
     posts.insert(0, post);
     notifyListeners();
   }
 
+  //caragar datos necesarios para la pantalla (Servicios)
   loadData(BuildContext context) async {
     final _loginVM = Provider.of<LoginViewModel>(context, listen: false);
 
@@ -30,7 +40,7 @@ class FeedViewModel extends ChangeNotifier {
     //load prosses
     isLoading = true;
     notifyListeners();
-    //call service
+    //call service obtener Informacion de usuario
     ApiResModel res = await userService.getInfoUser(
       _loginVM.nameUser,
       _loginVM.token,
@@ -41,7 +51,7 @@ class FeedViewModel extends ChangeNotifier {
       //stop prosses
       isLoading = false;
       notifyListeners();
-
+      //si algo salio mal mostrar alerta
       showDialog(
         context: context,
         builder: (context) => AlertInfoWidget(
@@ -56,6 +66,7 @@ class FeedViewModel extends ChangeNotifier {
 
     BannerService bannerService = BannerService();
 
+    //ejecutar servicio para obtener banner
     ApiResModel resBanner = await bannerService.getBanner(
       _loginVM.nameUser,
       _loginVM.token,
@@ -67,6 +78,7 @@ class FeedViewModel extends ChangeNotifier {
       isLoading = false;
       notifyListeners();
 
+      //si algo salio mal mostrar mensaje
       showDialog(
         context: context,
         builder: (context) => AlertInfoWidget(
@@ -81,6 +93,7 @@ class FeedViewModel extends ChangeNotifier {
 
     PostService postService = PostService();
 
+    //Uso del servicio para obtener publicaciones
     ApiResModel resPost = await postService.getPosts(
       _loginVM.nameUser,
       _loginVM.token,
@@ -92,6 +105,7 @@ class FeedViewModel extends ChangeNotifier {
 
     //valid succes response
     if (!resPost.succes) {
+      //si algo salio mal mostrar alerta
       showDialog(
         context: context,
         builder: (context) => AlertInfoWidget(
@@ -104,7 +118,7 @@ class FeedViewModel extends ChangeNotifier {
       return;
     }
 
-    //ad data in list
+    //agreagar datos encontrados a lista globales
     users.clear();
     users.addAll(res.message);
 
@@ -115,20 +129,26 @@ class FeedViewModel extends ChangeNotifier {
     posts.addAll(resPost.message);
   }
 
+  //buscar url en un texto
   splitText(String texto) {
+    //expresion regular para validar urls
     RegExp regExp = RegExp(
       r"(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+\.[\w/\-?=%.]+",
       caseSensitive: false,
       multiLine: false,
     );
 
+    //buscar si en el texto hay url
     Iterable<Match> matches = regExp.allMatches(texto);
 
+    //elementos contiene el texto y urls
     List<ElementoTextoModel> elementos = [];
     int lastIndex = 0;
 
+    //evaluar expresion regular
     for (Match match in matches) {
       if (match.start > lastIndex) {
+        //su el texto no es enlace agregar
         elementos.add(
           ElementoTextoModel(
             contenido: texto.substring(lastIndex, match.start),
@@ -136,6 +156,7 @@ class FeedViewModel extends ChangeNotifier {
           ),
         );
       }
+      //si el texto es enlace agregar
       elementos.add(
         ElementoTextoModel(
           contenido: match.group(0)!,
@@ -144,7 +165,7 @@ class FeedViewModel extends ChangeNotifier {
       );
       lastIndex = match.end;
     }
-
+    //si el texto no es enlace agregar
     if (lastIndex < texto.length) {
       elementos.add(
         ElementoTextoModel(
@@ -153,17 +174,21 @@ class FeedViewModel extends ChangeNotifier {
         ),
       );
     }
+    //Retorna lista de textos y enlaces
     return elementos;
   }
 
+  //navegar a detalles de la publicacion (pantalla)
   navigatePost(BuildContext context, PostModel post) {
     final _postVM = Provider.of<PostViewModel>(
       context,
       listen: false,
     );
 
+    //Cragar detalles de la publicacion (comentarios, imagenes...)
     _postVM.loadData(context, post.tarea);
 
+    //navegar a oantalla detalles
     Navigator.pushNamed(
       context,
       "post",
@@ -171,9 +196,11 @@ class FeedViewModel extends ChangeNotifier {
     );
   }
 
+  //Cerrar sesion
   logout(BuildContext context) {
     final _loginVM = Provider.of<LoginViewModel>(context, listen: false);
 
+    //mostatr dialogo de confirmacion
     showDialog(
       context: context,
       builder: (context) => AlertWidget(

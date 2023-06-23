@@ -1,15 +1,18 @@
 import 'package:fl_comunicacion/models/models.dart';
-import 'package:fl_comunicacion/services/welcome_service.dart';
+import 'package:fl_comunicacion/services/services.dart';
 import 'package:fl_comunicacion/view_models/view_models.dart';
 import 'package:fl_comunicacion/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class WelcomeViewModel extends ChangeNotifier {
+  //manejar proceso
   bool isLoading = false;
 
+  //lista con mmensja de bienvenida
   final List<WelcomeModel> mensajes = [];
 
+  //cargar datos pantalla detalles de oublicacion
   loadData(BuildContext context) async {
     //data user
     final _loginVM = Provider.of<LoginViewModel>(context, listen: false);
@@ -47,9 +50,11 @@ class WelcomeViewModel extends ChangeNotifier {
     mensajes.addAll(res.message);
   }
 
+  //cerrar sesion
   logout(BuildContext context) {
     final _loginVM = Provider.of<LoginViewModel>(context, listen: false);
 
+    //dualogo de confirmacion
     showDialog(
       context: context,
       builder: (context) => AlertWidget(

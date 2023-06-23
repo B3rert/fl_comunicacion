@@ -5,10 +5,17 @@ import 'package:fl_comunicacion/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 class LoginViewModel extends ChangeNotifier {
+  //manejar flujo del procesp
   bool isLoading = false;
+  //token del usuario
   String token = "";
+  //nombre del usuario
   String nameUser = "";
-  //Map form
+  //conytrolar seion permanente
+  bool isSliderDisabledSession = false;
+  //ocultar y mostrar contraseña
+  bool obscureText = true;
+  //formulario login
   final Map<String, String> formValues = {
     'user': '',
     'pass': '',
@@ -21,9 +28,6 @@ class LoginViewModel extends ChangeNotifier {
   bool isValidForm() {
     return formKey.currentState?.validate() ?? false;
   }
-
-  bool isSliderDisabledSession = false;
-  bool obscureText = true;
 
   // Toggles the password show status
   void toggle() {
@@ -42,7 +46,9 @@ class LoginViewModel extends ChangeNotifier {
     Navigator.pushNamed(context, "api");
   }
 
+  //cerrar Sesion
   logout() {
+    //limpiar datos en preferencias
     Preferences.clearToken();
     token = "";
     nameUser = "";
@@ -57,17 +63,23 @@ class LoginViewModel extends ChangeNotifier {
     // Navigator.pushNamed(context, "home");
     if (isValidForm()) {
       //code if valid true
-      LoginModel loginModel =
-          LoginModel(user: formValues["user"]!, pass: formValues["pass"]!);
+      LoginModel loginModel = LoginModel(
+        user: formValues["user"]!,
+        pass: formValues["pass"]!,
+      );
 
+      //iniciar proceso
       isLoading = true;
       notifyListeners();
 
+      //uso servicio login
       ApiResModel res = await loginService.postLogin(loginModel);
 
+      //finalizar proceso
       isLoading = false;
       notifyListeners();
 
+      //validar respuesta del servico, si es incorrecta
       if (!res.succes) {
         showDialog(
           context: context,
@@ -81,20 +93,25 @@ class LoginViewModel extends ChangeNotifier {
         return;
       }
 
+      //mapear respuesta servicio
       RespLogin respLogin = res.message;
 
+      //si el usuaro es correcto
       if (respLogin.success) {
         //guardar token y nombre de usuario
         token = respLogin.res;
         nameUser = loginModel.user;
 
+        //si la sesion es permanente guardar en preferencias el token
         if (isSliderDisabledSession) {
           Preferences.token = token;
           Preferences.userName = nameUser;
         }
 
+        //navegar a home
         Navigator.pushReplacementNamed(context, "home");
       } else {
+        //si el uario es incorrecto
         NotificationsService.showSnackbar(respLogin.res);
       }
     }

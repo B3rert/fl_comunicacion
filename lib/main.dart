@@ -55,18 +55,20 @@ class MyApp extends StatelessWidget {
     // Preferences.clearToken();
 
     return MaterialApp(
+      //snackbar global
       scaffoldMessengerKey: NotificationsService.messengerKey,
-      title: "Restaurante",
+      title: "Comunicacion",
       debugShowCheckedModeBanner: false,
+      //Tema de la aplicacion
       theme: AppTheme.lightTheme,
-      // initialRoute: "home",
+      //configurar ruta inicial
       initialRoute: Preferences.urlApi.isEmpty
-          ? "api"
+          ? "api" //si no hay url de apis pantalla configuracion apis
           : Preferences.token.isNotEmpty
-              ? AppRoutes.secondRoute
-              : AppRoutes.initialRoute,
-      routes: AppRoutes.routes,
-      onGenerateRoute: AppRoutes.onGenerateRoute,
+              ? AppRoutes.secondRoute //Home
+              : AppRoutes.initialRoute, //login
+      routes: AppRoutes.routes, //rutas
+      onGenerateRoute: AppRoutes.onGenerateRoute, //en caso de ruta incorrecta
     );
   }
 }

@@ -1,7 +1,6 @@
 import 'package:any_link_preview/any_link_preview.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:fl_comunicacion/models/models.dart';
-import 'package:fl_comunicacion/services/notificacions_service.dart';
+import 'package:fl_comunicacion/services/services.dart';
 import 'package:fl_comunicacion/themes/app_theme.dart';
 import 'package:fl_comunicacion/view_models/view_models.dart';
 import 'package:flutter/material.dart';
@@ -113,9 +112,8 @@ class PostWidget extends StatelessWidget {
             const SizedBox(height: 10),
 
             _ContentText(elementos: _vm.splitText(post.observacion1)),
-            const SizedBox(height: 10),
-            //TODO:Validar fotos,
-            // if (index > 1) _MyCarousel(),
+            // const SizedBox(height: 10),
+            //TODO:Agregar fotos (Mismos widgets que comentarios),
             const SizedBox(height: 20),
 
             Text(
@@ -193,42 +191,6 @@ class _ContentText extends StatelessWidget {
           ],
         );
       },
-    );
-  }
-}
-
-class _MyCarousel extends StatelessWidget {
-  //TODO: revisar error en imagenes
-  final List<String> images = [
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/640px-No-Image-Placeholder.svg.png',
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/640px-No-Image-Placeholder.svg.png',
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/640px-No-Image-Placeholder.svg.png',
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return CarouselSlider(
-      options: CarouselOptions(
-        height: 400.0,
-        pageSnapping: true,
-      ),
-      items: images.map((String image) {
-        return Builder(
-          builder: (BuildContext context) {
-            return FadeInImage(
-              image: NetworkImage(image),
-              placeholder: const AssetImage("assets/load.gif"),
-              imageErrorBuilder: (context, error, stackTrace) {
-                return Image.asset(
-                  'assets/placeimg.jpg',
-                  fit: BoxFit.cover,
-                );
-              },
-              fit: BoxFit.cover,
-            );
-          },
-        );
-      }).toList(),
     );
   }
 }

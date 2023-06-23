@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class NewPostViewModel extends ChangeNotifier {
+  //Cargar procesos
   bool isLoading = false;
 
   //Map form
@@ -22,22 +23,28 @@ class NewPostViewModel extends ChangeNotifier {
     return formKey.currentState?.validate() ?? false;
   }
 
+  //crear nueva publicacion
   createPost(BuildContext context) async {
+    //validar formulario
     if (!isValidForm()) return;
 
+    //instancia del servico
     PostService postService = PostService();
 
+    //iniciar proceso
     isLoading = true;
     notifyListeners();
 
     final _loginVM = Provider.of<LoginViewModel>(context, listen: false);
 
+    //objeto publicacion
     PostPostModel newPost = PostPostModel(
       user: _loginVM.nameUser,
       titulo: formValues["title"]!,
       descripcion: formValues["description"]!,
     );
 
+    //Uso del servicio crear nueva publicacion
     ApiResModel res = await postService.postPost(_loginVM.token, newPost);
 
     //stop prosses
@@ -58,8 +65,10 @@ class NewPostViewModel extends ChangeNotifier {
       return;
     }
 
+    //publicacion que se creo devuleta por el servico
     List<PostResModel> posts = res.message;
 
+    //si no hay publicacion en la respuesta no se creo la publicacion
     if (posts.isEmpty) {
       showDialog(
         context: context,
@@ -73,9 +82,11 @@ class NewPostViewModel extends ChangeNotifier {
       return;
     }
 
+    //si se creo la publicacion mosttar mensaje
     NotificationsService.showSnackbar("Publicacion creada correctamente");
     final _feedVM = Provider.of<FeedViewModel>(context, listen: false);
 
+    //Nueva publicacion
     PostModel post = PostModel(
       tarea: posts[0].tarea,
       descripcion: newPost.titulo,
@@ -89,8 +100,10 @@ class NewPostViewModel extends ChangeNotifier {
       imagen: _feedVM.users[0].foto,
     );
 
+    //agregar nueva publicacion a la pantalla pulicaciones
     _feedVM.postInFeed(post);
 
+    //limmpiar formulario
     formValues["title"] = "";
     formValues["description"] = "";
   }
