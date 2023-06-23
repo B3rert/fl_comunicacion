@@ -8,10 +8,11 @@ class LoginService {
   // Url del servidor
   final String _baseUrl = Preferences.urlApi;
 
-  // Consume el Api
+  //Login de usuario
   Future<ApiResModel> postLogin(LoginModel loginModel) async {
-    //  Consumo del Api
+    //manejo de errores
     try {
+      //url completa
       Uri url = Uri.parse("${_baseUrl}Login");
 
       // Configurar Api y consumirla
@@ -23,11 +24,13 @@ class LoginService {
       // Asignar respuesta del Api ResLogin
       RespLogin respLogin = RespLogin.fromMap(jsonDecode(response.body));
 
+      //respuesta correcta
       return ApiResModel(
         succes: true,
         message: respLogin,
       );
     } catch (e) {
+      //respuesta incorrecta
       return ApiResModel(
         succes: false,
         message: e.toString(),

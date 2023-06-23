@@ -7,21 +7,28 @@ class PostService {
   // Url del servidor
   final String _baseUrl = Preferences.urlApi;
 
+  //obtener publicaciones
   Future<ApiResModel> getPosts(
     String user,
     String token,
   ) async {
+    //manejo de errores
     try {
+      //url del servidor
       Uri url = Uri.parse("${_baseUrl}Publicacion/$user");
 
+      //consumo y configuracion del api
       final response = await http.get(
         url,
         headers: {
           "Authorization": "bearer $token",
         },
       );
+
+      //Respuesta del apo
       final resJson = json.decode(response.body);
 
+      //Guardar publicaciones
       List<PostModel> posts = [];
 
       //recorrer lista api Y  agregar a lista local
@@ -32,11 +39,13 @@ class PostService {
         posts.add(responseFinally);
       }
 
+      //respuesta correcta
       return ApiResModel(
         succes: true,
         message: posts,
       );
     } catch (e) {
+      //Respuesta incorrecta
       return ApiResModel(
         succes: false,
         message: e.toString(),
@@ -44,22 +53,28 @@ class PostService {
     }
   }
 
+  //obtener comentarios
   Future<ApiResModel> getComments(
     String user,
     String token,
     int tarea,
   ) async {
     try {
+      //url del api
       Uri url = Uri.parse("${_baseUrl}Publicacion/comentarios/$user/$tarea");
 
+      //consumo y configuracion del api
       final response = await http.get(
         url,
         headers: {
           "Authorization": "bearer $token",
         },
       );
+
+      //Respuesta del api
       final resJson = json.decode(response.body);
 
+      //guardar comentarios
       List<CommentModel> comments = [];
 
       //recorrer lista api Y  agregar a lista local
@@ -70,11 +85,13 @@ class PostService {
         comments.add(responseFinally);
       }
 
+      //respuesta correcta
       return ApiResModel(
         succes: true,
         message: comments,
       );
     } catch (e) {
+      //respuesta incorrecta
       return ApiResModel(
         succes: false,
         message: e.toString(),
@@ -82,6 +99,7 @@ class PostService {
     }
   }
 
+  //obtener archivos de comentario
   Future<ApiResModel> getFilesComments(
     String user,
     String token,
@@ -89,17 +107,21 @@ class PostService {
     int comentario,
   ) async {
     try {
+      //url del api
       Uri url = Uri.parse(
           "${_baseUrl}Publicacion/comentarios/archivos/$user/$tarea/$comentario");
 
+      //consumo y configuracion del api
       final response = await http.get(
         url,
         headers: {
           "Authorization": "bearer $token",
         },
       );
+      //respuesta del api
       final resJson = json.decode(response.body);
 
+      //Guatradar archivos encontrados
       List<FilesCommentModel> files = [];
 
       //recorrer lista api Y  agregar a lista local
@@ -110,11 +132,13 @@ class PostService {
         files.add(responseFinally);
       }
 
+      //Respuesta correcta
       return ApiResModel(
         succes: true,
         message: files,
       );
     } catch (e) {
+      //respuesta incorrecta
       return ApiResModel(
         succes: false,
         message: e.toString(),
@@ -122,13 +146,14 @@ class PostService {
     }
   }
 
-  // Consume el Api
+  //Crear nueva publicacion
   Future<ApiResModel> postPost(
     String token,
     PostPostModel post,
   ) async {
-    //  Consumo del Api
+    //manejo de erroes
     try {
+      //url del api
       Uri url = Uri.parse("${_baseUrl}Publicacion");
 
       // Configurar Api y consumirla
@@ -140,8 +165,11 @@ class PostService {
           "Authorization": "bearer $token",
         },
       );
+
+      //Respuesta del api
       final resJson = json.decode(response.body);
 
+      //Guardar respues del servicio
       List<PostResModel> posts = [];
 
       //recorrer lista api Y  agregar a lista local
@@ -152,11 +180,13 @@ class PostService {
         posts.add(responseFinally);
       }
 
+      //respuesta correcta
       return ApiResModel(
         succes: true,
         message: posts,
       );
     } catch (e) {
+      //Respuesta incorrecta
       return ApiResModel(
         succes: false,
         message: e.toString(),
@@ -164,12 +194,12 @@ class PostService {
     }
   }
 
-  // Consume el Api
+  //Crear nuevo comentario
   Future<ApiResModel> posComment(
     String token,
     PostCommentModel comment,
   ) async {
-    //  Consumo del Api
+    //url del api
     try {
       Uri url = Uri.parse("${_baseUrl}Publicacion/comentario");
 
@@ -182,8 +212,11 @@ class PostService {
           "Authorization": "bearer $token",
         },
       );
+
+      //Respuesta del api
       final resJson = json.decode(response.body);
 
+      //Comentario creado devulto por el PA
       List<CommentModel> comments = [];
 
       //recorrer lista api Y  agregar a lista local
@@ -194,11 +227,13 @@ class PostService {
         comments.add(responseFinally);
       }
 
+      //respuesta correcta
       return ApiResModel(
         succes: true,
         message: comments,
       );
     } catch (e) {
+      //respuesta incorrecta
       return ApiResModel(
         succes: false,
         message: e.toString(),
